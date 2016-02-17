@@ -37,6 +37,7 @@ public class ALogin extends AppCompatActivity {
 
             Intent intent = new Intent(this, AHome.class);
             startActivity(intent);
+            Toast.makeText(ALogin.this, "Welcome " + MY_NAME, Toast.LENGTH_SHORT).show();
             finish();
 
         }

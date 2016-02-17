@@ -1,7 +1,8 @@
 package com.kc.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.kc.R;
@@ -12,6 +13,10 @@ public class AHome extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a_home);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.ahome_toolbar);
+        setSupportActionBar(toolbar);
+
     }
     
     @Override

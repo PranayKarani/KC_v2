@@ -1,12 +1,53 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/ahome_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.kc.activities.AHome">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#252e32">
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/ahome_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="4dp"
+                android:background="#ff634a"/>
+        <FrameLayout
+                android:id="@+id/ahome_framelayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context="com.kc.activities.AHome">
+                android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ahome_drawer_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:choiceMode="singleChoice"
+            android:background="#37633a"
+            android:orientation="vertical"
+            android:elevation="16dp"
+            android:dividerPadding="2dp">
+
+        <ListView
+                android:id="@+id/ahome_drawer_listview"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice"
+                android:dividerHeight="0dp"
+                android:layout_weight="1"
+                android:divider="#00ffffff"/>
+
+    </LinearLayout>
 
 
-</LinearLayout>
+</android.support.v4.widget.DrawerLayout>
