@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - kc@localhost" uuid="99a4812f-01c7-4015-bb21-7aa16876dbb8">
+    <database-info product="MySQL" version="5.6.17" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.4">
+      <schema id="1" name="kc"/>
+      <table id="2" parent="1" name="notice"/>
+      <table id="3" parent="1" name="student"/>
+      <column id="4" parent="2" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="5" parent="2" name="header">
+        <mandatory>1</mandatory>
+        <data-type>text</data-type>
+      </column>
+      <column id="6" parent="2" name="message">
+        <mandatory>1</mandatory>
+        <data-type>text</data-type>
+      </column>
+      <column id="7" parent="2" name="sender">
+        <mandatory>1</mandatory>
+        <data-type>text</data-type>
+      </column>
+      <column id="8" parent="2" name="date">
+        <mandatory>1</mandatory>
+        <data-type>date</data-type>
+      </column>
+      <column id="9" parent="2" name="time">
+        <mandatory>1</mandatory>
+        <data-type>time</data-type>
+      </column>
+      <key id="10" parent="2" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="11" parent="3" name="student_id">
+        <mandatory>1</mandatory>
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="12" parent="3" name="user_gcm_id">
+        <mandatory>1</mandatory>
+        <data-type>text</data-type>
+      </column>
+      <column id="13" parent="3" name="active">
+        <mandatory>1</mandatory>
+        <data-type>tinyint(1)</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="14" parent="3" name="current_sem">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="15" parent="3" name="roll_no">
+        <mandatory>1</mandatory>
+        <data-type>tinyint(3) unsigned</data-type>
+      </column>
+      <column id="16" parent="3" name="name">
+        <mandatory>1</mandatory>
+        <data-type>text</data-type>
+      </column>
+      <key id="17" parent="3" name="PRIMARY">
+        <columns>student_id</columns>
+        <primary>1</primary>
+      </key>
+    </database-model>
+  </data-source>
+</component>
