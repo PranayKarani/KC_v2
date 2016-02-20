@@ -7,47 +7,48 @@ import android.util.Log;
 
 public class MyActivity extends AppCompatActivity {
 
-    protected String TAG = this.getClass().getSimpleName();
+    protected String TAG   = "Acti_Life";
+    protected String CLASS = this.getClass().getSimpleName();
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v(TAG, TAG + " onCreate");
+        Log.v(TAG, CLASS + " onCreate");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.v(TAG, TAG + " onStart");
+        Log.v(TAG, CLASS + " onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.v(TAG, TAG + " onResume");
+        Log.v(TAG, CLASS + " onResume");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.v(TAG, TAG + " onPause");
+        Log.v(TAG, CLASS + " onPause");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.v(TAG, TAG + " onRestart");
+        Log.v(TAG, CLASS + " onRestart");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.v(TAG, TAG + " onStop");
+        Log.v(TAG, CLASS + " onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v(TAG, TAG + " onDestroy");
+        Log.v(TAG, CLASS + " onDestroy");
     }
 
 }

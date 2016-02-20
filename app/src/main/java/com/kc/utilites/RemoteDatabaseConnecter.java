@@ -72,13 +72,6 @@ public class RemoteDatabaseConnecter {
 
     }
 
-//    public void newRequest(String method, String URL) {
-//        this.url = URL;
-//        huc = null;
-//        this.method = method;
-//        rawData = null;
-//    }
-
     public String getRawData(){
         return rawData;
     }
