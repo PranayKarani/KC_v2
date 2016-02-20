@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -26,12 +25,14 @@ import static com.kc.C.MY_NAME;
 import static com.kc.C.STUDENT_VALIDTY;
 import static com.kc.C.UPDATE_GCM_ID;
 
-public class ALogin extends AppCompatActivity {
-    
+
+public class ALogin extends MyActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a_login);
+
 
         if(fileReadSuccess()){
 
@@ -44,6 +45,7 @@ public class ALogin extends AppCompatActivity {
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void onLoginClick(View view){
 
         EditText input = (EditText) findViewById(R.id.alogin_login_box);
@@ -65,6 +67,7 @@ public class ALogin extends AppCompatActivity {
                     dialog.setMessage("connecting to the database");
                     dialog.setCancelable(false);
                     dialog.show();
+                    Log.i(TAG, "login thread started");
                 }
 
                 @Override
@@ -74,10 +77,10 @@ public class ALogin extends AppCompatActivity {
 
                         // first check student's validity
                         String validity_result = new RemoteDatabaseConnecter("GET", STUDENT_VALIDTY + "student_id=" +input_id)
-                                .connect(null, true)
+                                .connect(null)
                                 .getRawData();
 
-                        Log.d("kc", "validity result = " + validity_result);
+                        Log.d(TAG, "validity result = " + validity_result);
 
                         switch (validity_result){
                             case "0":
@@ -91,10 +94,10 @@ public class ALogin extends AppCompatActivity {
                                 while((!MY_GCM_ID.equals("") || MY_GCM_ID != null) && nooTries < 4){
 
                                     new RemoteDatabaseConnecter("POST",UPDATE_GCM_ID)
-                                            .connect("student_id=" + input_id + "&user_gcm_id=" + MY_GCM_ID, true);
+                                            .connect("student_id=" + input_id + "&user_gcm_id=" + MY_GCM_ID);
 
                                     String recheck_result = new RemoteDatabaseConnecter("GET", GCM_ID_RECHECK +"student_id="+input_id+"&gcm_id="+MY_GCM_ID)
-                                            .connect(null, true)
+                                            .connect(null)
                                             .getRawData();
 
                                     if(recheck_result.equals("-1") || recheck_result == null){
@@ -130,7 +133,8 @@ public class ALogin extends AppCompatActivity {
                         }
 
                     } catch (Exception e){
-                        e.printStackTrace();
+                        Log.d(TAG, e.getMessage());
+                        Log.e(TAG, Log.getStackTraceString(e));
                     }
 
                     return null;
@@ -147,6 +151,7 @@ public class ALogin extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }
+                    Log.i(TAG, "login thread finished");
                 }
 
             }.execute(null, null, null);
@@ -164,7 +169,7 @@ public class ALogin extends AppCompatActivity {
         MY_ID = sp.getString("my_student_id", "notFound");
         MY_NAME = sp.getString("my_name", "notFound");
         MY_GCM_ID = sp.getString("my_gcm_id", "notFound");
-
+        Log.i(TAG, "fileRead details:\nMY_ID = " + MY_ID + "\nMT_NAME = " + MY_NAME + "\nMY_GCM_ID = " + MY_GCM_ID);
         return !MY_ID.equals("notFound");
     }
 

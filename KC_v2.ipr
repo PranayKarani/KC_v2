@@ -20,7 +20,7 @@
       </profile>
     </annotationProcessing>
   </component>
-  <component name="DataSourceManagerImpl" format="xml" hash="3257816392">
+  <component name="DataSourceManagerImpl" format="xml" hash="898027199">
     <data-source source="LOCAL" name="MySQL - kc@localhost" uuid="99a4812f-01c7-4015-bb21-7aa16876dbb8">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>

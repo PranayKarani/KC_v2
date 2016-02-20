@@ -12,17 +12,18 @@ import java.net.URL;
 
 public class RemoteDatabaseConnecter {
 
+    public String rawData;
     String            url;
     String            method;
     HttpURLConnection huc;
-    public String rawData;
+    private String TAG = this.getClass().getSimpleName();
 
     public RemoteDatabaseConnecter(String method, String url) {
         this.method = method;
         this.url = url;
     }
 
-    public RemoteDatabaseConnecter connect(String requestBody, boolean debug) throws IOException {
+    public RemoteDatabaseConnecter connect(String requestBody) throws IOException {
 
         // todo check for internet connection
         // todo setup connection timeout
@@ -59,13 +60,11 @@ public class RemoteDatabaseConnecter {
 
             rawData = sb.toString();
 
-        } else {
-            debug = true;
         }
 
-        if(debug){
-            Log.d("kc", getServerResponse());
-        }
+
+        Log.i(TAG, getServerResponse());
+        Log.d(TAG, this.toString());
 
         huc.disconnect();
 
@@ -85,7 +84,7 @@ public class RemoteDatabaseConnecter {
     }
 
     public String getServerResponse() throws IOException {
-        return "code: " + huc.getResponseCode() + ", message: " + huc.getResponseMessage();
+        return "Response for " + url + "\ncode: " + huc.getResponseCode() + ", message: " + huc.getResponseMessage();
     }
 
     @Override
