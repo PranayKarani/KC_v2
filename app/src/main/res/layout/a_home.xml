@@ -19,15 +19,24 @@
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="4dp"
                 android:background="#ff634a"/>
+        <ProgressBar
+                android:id="@+id/ahome_progressBar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-8dp"
+                android:indeterminate="false"
+                android:max="100"/>
         <FrameLayout
                 android:id="@+id/ahome_framelayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/material_grey_800"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1">
+
+        </FrameLayout>
 
     </LinearLayout>
 

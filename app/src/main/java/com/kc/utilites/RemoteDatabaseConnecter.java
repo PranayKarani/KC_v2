@@ -1,6 +1,9 @@
 package com.kc.utilites; // 17 Feb, 11:28 AM
 
 import android.util.Log;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,9 +35,11 @@ public class RemoteDatabaseConnecter {
         huc.setRequestMethod(method);
 
         huc.setDoInput(true);
-        if (method.equals("POST")) huc.setDoInput(true);
+        if (method.equals("POST")) {
+            huc.setDoInput(true);
+        }
 
-        if(requestBody != null){
+        if (requestBody != null) {
 
             huc.setFixedLengthStreamingMode(requestBody.getBytes().length);
 
@@ -46,13 +51,13 @@ public class RemoteDatabaseConnecter {
 
         huc.connect();
 
-        if(huc.getResponseCode() == HttpURLConnection.HTTP_OK){
+        if (huc.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
             StringBuilder sb = new StringBuilder();
             InputStream is = huc.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String data;
-            while((data = br.readLine()) != null){
+            while ((data = br.readLine()) != null) {
                 sb.append(data);
             }
             is.close();
@@ -64,7 +69,7 @@ public class RemoteDatabaseConnecter {
 
 
         Log.i(TAG, getServerResponse());
-        Log.d(TAG, this.toString());
+        Log.v(TAG, "server data:\n" + rawData);
 
         huc.disconnect();
 
@@ -72,7 +77,7 @@ public class RemoteDatabaseConnecter {
 
     }
 
-    public String getRawData(){
+    public String getRawData() {
         return rawData;
     }
 
@@ -80,10 +85,27 @@ public class RemoteDatabaseConnecter {
         return "Response for " + url + "\ncode: " + huc.getResponseCode() + ", message: " + huc.getResponseMessage();
     }
 
+    public JSONObject getJSONObject(String dataSource, String dataName, int idx) throws JSONException {
+        JSONArray ja = new JSONObject(dataSource).getJSONArray(dataName);
+        return ja.getJSONObject(idx);
+    }
+
+    public JSONObject getJSONObject(String dataName) throws JSONException {
+        return getJSONObject(rawData, dataName, 0);
+    }
+
+    public JSONObject getJSONObject(String dataName, int idx) throws JSONException {
+        return getJSONObject(rawData, dataName, idx);
+    }
+
+    public JSONObject getJSONObject() throws JSONException {
+        return new JSONObject(rawData);
+    }
+
     @Override
     public String toString() {
         try {
-            return getServerResponse() +"\nData from server:\n"+ rawData;
+            return getServerResponse() + "\nData from server:\n" + rawData;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

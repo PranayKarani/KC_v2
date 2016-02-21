@@ -22,6 +22,8 @@ import static com.kc.C.GOOGLE_PROJECT_NO;
 import static com.kc.C.MY_GCM_ID;
 import static com.kc.C.MY_ID;
 import static com.kc.C.MY_NAME;
+import static com.kc.C.MY_ROLL;
+import static com.kc.C.MY_SEM;
 import static com.kc.C.STUDENT_VALIDTY;
 import static com.kc.C.UPDATE_GCM_ID;
 
@@ -35,6 +37,9 @@ public class ALogin extends MyActivity {
 
 
         if(fileReadSuccess()){
+
+            // check for necessary updates from server and store locally (if internet connection is avaiable)
+
 
             Intent intent = new Intent(this, AHome.class);
             startActivity(intent);
@@ -67,7 +72,7 @@ public class ALogin extends MyActivity {
                     dialog.setMessage("connecting to the database");
                     dialog.setCancelable(false);
                     dialog.show();
-                    Log.i(TAG, "login thread started");
+                    Log.d(TAG, "login thread started");
                 }
 
                 @Override
@@ -133,8 +138,7 @@ public class ALogin extends MyActivity {
                         }
 
                     } catch (Exception e){
-                        Log.d(TAG, e.getMessage());
-                        Log.e(TAG, Log.getStackTraceString(e));
+                        e.printStackTrace();
                     }
 
                     return null;
@@ -151,7 +155,7 @@ public class ALogin extends MyActivity {
                         startActivity(intent);
                         finish();
                     }
-                    Log.i(TAG, "login thread finished");
+                    Log.d(TAG, "login thread finished");
                 }
 
             }.execute(null, null, null);
@@ -167,8 +171,10 @@ public class ALogin extends MyActivity {
         SharedPreferences sp = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
 
         MY_ID = sp.getString("my_student_id", "notFound");
-        MY_NAME = sp.getString("my_name", "notFound");
         MY_GCM_ID = sp.getString("my_gcm_id", "notFound");
+        MY_SEM = sp.getInt("my_sem", -1);
+        MY_ROLL = sp.getInt("my_roll", -1);
+        MY_NAME = sp.getString("my_name", "notFound");
         Log.i(TAG, "fileRead details:\nMY_ID = " + MY_ID + "\nMT_NAME = " + MY_NAME + "\nMY_GCM_ID = " + MY_GCM_ID);
         return !MY_ID.equals("notFound");
     }

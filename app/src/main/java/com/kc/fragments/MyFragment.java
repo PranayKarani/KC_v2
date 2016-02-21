@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MyFragment extends Fragment {
+public abstract class MyFragment extends Fragment {
 
     protected String CLASS = this.getClass().getSimpleName();
     private   String TAG   = "Frag_Life";

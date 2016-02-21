@@ -5,9 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-public class MyActivity extends AppCompatActivity {
+public abstract class MyActivity extends AppCompatActivity {
 
-    protected String TAG   = "Acti_Life";
+    protected String TAG   = "A";
     protected String CLASS = this.getClass().getSimpleName();
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
