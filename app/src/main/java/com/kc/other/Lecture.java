@@ -21,6 +21,32 @@ public class Lecture {
         this.end_time = end_time;
     }
 
+    public String getFormatedStartTime() {
+
+        int h = start_time / 10000;
+        int m = (start_time % 10000) / 100;
+
+        if (m < 10) {
+            return h + ":0" + m;
+        } else {
+            return h + ":" + m;
+        }
+
+    }
+
+    public String getFormatedEndTime() {
+
+        int h = end_time / 10000;
+        int m = (end_time % 10000) / 100;
+
+        if (m < 10) {
+            return h + ":0" + m;
+        } else {
+            return h + ":" + m;
+        }
+
+    }
+
     public String getFormatedTime(int time) {
 
         int h = time / 10000;

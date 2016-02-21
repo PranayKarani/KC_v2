@@ -10,9 +10,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.kc.R;
 import com.kc.activities.AHome;
 import com.kc.database.DBHelper;
@@ -97,25 +99,43 @@ public class FHome extends MyFragment {
         }
 
         @Override
-        protected void onPostExecute(Lecture[] lecs) {
+        protected void onPostExecute(final Lecture[] lecs) {
 
             LinearLayout container = (LinearLayout) view.findViewById(R.id.fhome_schedules_container);
 
             for (int i = 0; i < lecs.length; i++) {
                 LinearLayout scheduleData = (LinearLayout) FHome.this.getActivity().getLayoutInflater().inflate(R.layout.x_schedule_data, null);
 
-                CardView actualContainer = (CardView) scheduleData.findViewById(R.id.xScheduleData_actual_container);
+                /**
+                 * setup the lecture cardview
+                 */
+                CardView lectureCardview = (CardView) scheduleData.findViewById(R.id.xScheduleData_actual_container);
                 int sub_color_id = lecs[i].sub_id % 5;
                 int sub_color = getColor(sub_color_id);
-                actualContainer.setCardBackgroundColor(getResources().getColor(sub_color));
+                lectureCardview.setCardBackgroundColor(getResources().getColor(sub_color));
 
                 TextView n = (TextView) scheduleData.findViewById(R.id.xScheduleData_sub_name);
                 n.setText(lecs[i].short_name);
 
                 TextView t = (TextView) scheduleData.findViewById(R.id.xScheduleData_sub_stime);
-                t.setText(lecs[i].getFormatedTime(lecs[i].start_time));
+                t.setText(lecs[i].getFormatedStartTime());
 
-                // todo add clickListener to cardView and pass in lec details
+                final int finalI = i;
+                lectureCardview.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Toast.makeText(stupidContext,
+                                       "Lecture name: " + lecs[finalI].full_name + "\n" +
+                                               "Subject ID: " + lecs[finalI].sub_id + "\n" +
+                                               "teacher: " + lecs[finalI].teacher + "\n" +
+                                               "Start time: " + lecs[finalI].getFormatedStartTime() + "\n" +
+                                               "End time: " + lecs[finalI].getFormatedEndTime(),
+
+                                       Toast.LENGTH_LONG).show();
+
+                    }
+                });
 
                 container.addView(scheduleData);
 
