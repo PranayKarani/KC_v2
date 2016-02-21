@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -16,19 +17,14 @@ import com.google.android.gms.iid.InstanceID;
 import com.kc.R;
 import com.kc.utilites.RemoteDatabaseConnecter;
 
-import static com.kc.C.FILE_NAME;
-import static com.kc.C.GCM_ID_RECHECK;
-import static com.kc.C.GOOGLE_PROJECT_NO;
-import static com.kc.C.MY_GCM_ID;
-import static com.kc.C.MY_ID;
-import static com.kc.C.MY_NAME;
-import static com.kc.C.MY_ROLL;
-import static com.kc.C.MY_SEM;
-import static com.kc.C.STUDENT_VALIDTY;
-import static com.kc.C.UPDATE_GCM_ID;
+import java.io.IOException;
+
+import static com.kc.C.*;
 
 
 public class ALogin extends MyActivity {
+
+    boolean acceptPassword = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +32,7 @@ public class ALogin extends MyActivity {
         setContentView(R.layout.a_login);
 
 
-        if(fileReadSuccess()){
-
-            // check for necessary updates from server and store locally (if internet connection is avaiable)
-
+        if (fileReadSuccess()) {
 
             Intent intent = new Intent(this, AHome.class);
             startActivity(intent);
@@ -51,114 +44,88 @@ public class ALogin extends MyActivity {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void onLoginClick(View view){
+    public void onLoginClick(View view) {
 
         EditText input = (EditText) findViewById(R.id.alogin_login_box);
         final String input_id = input.getText().toString();
 
-        if(input_id != null){
+        if (input_id != null) {
 
-            new AsyncTask<Void, Void, Void>() {
+            if (!acceptPassword) {
+                new AsyncTask<Void, Void, Void>() {
 
-                String toastMessage;
-                ProgressDialog dialog;
-                boolean gotoHomeScreen = false;
+                    String toastMessage;
+                    ProgressDialog dialog;
 
-                @Override
-                protected void onPreExecute() {
+                    @Override
+                    protected void onPreExecute() {
 
-                    dialog = new ProgressDialog(ALogin.this);
-                    dialog.setTitle("Please wait");
-                    dialog.setMessage("connecting to the database");
-                    dialog.setCancelable(false);
-                    dialog.show();
-                    Log.d(TAG, "login thread started");
-                }
+                        dialog = new ProgressDialog(ALogin.this);
+                        dialog.setTitle("Please wait");
+                        dialog.setMessage("connecting to the database");
+                        dialog.setCancelable(false);
+                        dialog.show();
+                        Log.d(TAG, "login thread started");
+                    }
 
-                @Override
-                protected Void doInBackground(Void... params) {
+                    @Override
+                    protected Void doInBackground(Void... params) {
 
-                    try{
+                        try {
 
-                        // first check student's validity
-                        String validity_result = new RemoteDatabaseConnecter("GET", STUDENT_VALIDTY + "student_id=" +input_id)
-                                .connect(null)
-                                .getRawData();
+                            // first check student's validity
+                            String validity_result = new RemoteDatabaseConnecter("GET", STUDENT_VALIDTY + "student_id=" + input_id)
+                                    .connect(null)
+                                    .getRawData();
 
-                        Log.d(TAG, "validity result = " + validity_result);
+                            Log.d(TAG, "validity result = " + validity_result);
 
-                        switch (validity_result){
-                            case "0":
+                            switch (validity_result) {
+                                case "0":
+                                    MY_ID = input_id;
+                                    acceptPassword = true;
+                                    toastMessage = "Password sent to your email account.\nCheck your inbox.";
+                                    break;
+                                case "1":
+                                    toastMessage = "No such student found.\nTry again.";
+                                    break;
+                                case "2":
+                                    toastMessage = "Account already active.\nContact staff for help.";
+                                    break;
+                                default:
+                                    toastMessage = "Someting went wrong :(";
+                                    finish();
+                                    break;
+                            }
 
-                                MY_ID = input_id;
-                                InstanceID iid = InstanceID.getInstance(ALogin.this);
-                                MY_GCM_ID = iid.getToken(GOOGLE_PROJECT_NO, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-
-                                short nooTries = 0;
-
-                                while((!MY_GCM_ID.equals("") || MY_GCM_ID != null) && nooTries < 4){
-
-                                    new RemoteDatabaseConnecter("POST",UPDATE_GCM_ID)
-                                            .connect("student_id=" + input_id + "&user_gcm_id=" + MY_GCM_ID);
-
-                                    String recheck_result = new RemoteDatabaseConnecter("GET", GCM_ID_RECHECK +"student_id="+input_id+"&gcm_id="+MY_GCM_ID)
-                                            .connect(null)
-                                            .getRawData();
-
-                                    if(recheck_result.equals("-1") || recheck_result == null){
-                                        MY_GCM_ID = "null";
-                                        nooTries++;
-                                    } else {
-                                        nooTries = 63;
-                                        MY_NAME = recheck_result;
-                                    }
-
-                                }
-
-                                SharedPreferences sp = ALogin.this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
-                                Editor editor = sp.edit();
-                                editor.putString("my_student_id", MY_ID);
-                                editor.putString("my_gcm_id", MY_GCM_ID);
-                                editor.putString("my_name", MY_NAME);
-                                editor.apply();
-
-                                toastMessage = "Account activated.";
-                                gotoHomeScreen = true;
-                                break;
-                            case "1":
-                                toastMessage = "No such student found.\nTry again.";
-                                break;
-                            case "2":
-                                toastMessage = "Account already active.\nContact staff for help.";
-                                break;
-                            default:
-                                toastMessage = "Someting went wrong :(";
-                                finish();
-                                break;
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
 
-                    } catch (Exception e){
-                        e.printStackTrace();
+                        return null;
                     }
 
-                    return null;
-                }
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
 
-                @Override
-                protected void onPostExecute(Void aVoid) {
+                        Toast.makeText(ALogin.this, toastMessage, Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
 
-                    Toast.makeText(ALogin.this, toastMessage, Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
+                        if (acceptPassword) {
+                            final EditText password = (EditText) findViewById(R.id.alogin_login_box);
+                            password.getText().clear();
+                            password.setHint("Enter password");
+                            Button b = (Button) findViewById(R.id.alogin_login_button);
+                            b.setText("Login");
 
-                    if(gotoHomeScreen){
-                        Intent intent = new Intent(ALogin.this, AHome.class);
-                        startActivity(intent);
-                        finish();
+                        }
+                        Log.d(TAG, "login thread finished");
                     }
-                    Log.d(TAG, "login thread finished");
-                }
 
-            }.execute(null, null, null);
+                }.execute(null, null, null);
+            } else {
+                new PasswordChecker().execute(input_id, null, null);
+            }
 
         } else {
             Toast.makeText(this, "Invalid input", Toast.LENGTH_LONG).show();
@@ -166,7 +133,7 @@ public class ALogin extends MyActivity {
 
     }
 
-    boolean fileReadSuccess(){
+    boolean fileReadSuccess() {
 
         SharedPreferences sp = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
 
@@ -178,9 +145,97 @@ public class ALogin extends MyActivity {
         Log.i(TAG, "fileRead details:\n" +
                 "MY_ID = " + MY_ID + "\n" +
                 "MT_NAME = " + MY_NAME + "\n" +
-                "MY_GCM_ID = " + MY_GCM_ID+"\n" +
+                "MY_GCM_ID = " + MY_GCM_ID + "\n" +
                 "MY_SEM = " + MY_SEM + "\n");
         return !MY_ID.equals("notFound");
+    }
+
+    class PasswordChecker extends AsyncTask<String, Void, Void> {
+
+        boolean gotoHomeScreen = false;
+        String         toastMessage;
+        ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(ALogin.this);
+            dialog.setTitle("Please wait");
+            dialog.setMessage("verifing password");
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            String password = params[0];
+
+            try {
+                RemoteDatabaseConnecter rdcPass = new RemoteDatabaseConnecter("GET", PASSWORD_CHECKER + "student_id=" + MY_ID + "&password=" + password)
+                        .connect(null);
+                String result = rdcPass.rawData;
+
+                switch (result) {
+                    case "0":
+                        InstanceID iid = InstanceID.getInstance(ALogin.this);
+                        MY_GCM_ID = iid.getToken(GOOGLE_PROJECT_NO, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+
+                        short nooTries = 0;
+
+                        while ((!MY_GCM_ID.equals("") || MY_GCM_ID != null) && nooTries < 4) {
+
+                            new RemoteDatabaseConnecter("POST", UPDATE_GCM_ID)
+                                    .connect("student_id=" + MY_ID + "&user_gcm_id=" + MY_GCM_ID);
+
+                            String recheck_result = new RemoteDatabaseConnecter("GET", GCM_ID_RECHECK + "student_id=" + MY_ID + "&gcm_id=" + MY_GCM_ID)
+                                    .connect(null)
+                                    .getRawData();
+
+                            if (recheck_result.equals("-1") || recheck_result == null) {
+                                MY_GCM_ID = "null";
+                                nooTries++;
+                            } else {
+                                nooTries = 63;
+                                MY_NAME = recheck_result;
+                            }
+
+                        }
+
+                        SharedPreferences sp = ALogin.this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+                        Editor editor = sp.edit();
+                        editor.putString("my_student_id", MY_ID);
+                        editor.putString("my_gcm_id", MY_GCM_ID);
+                        editor.putString("my_name", MY_NAME);
+                        editor.apply();
+                        toastMessage = "Welcome " + MY_NAME;
+                        gotoHomeScreen = true;
+                        break;
+                    case "1":
+                        toastMessage = "Incorrect password";
+                        break;
+                    default:
+                        toastMessage = "Somrthing went wrong";
+
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+            Toast.makeText(ALogin.this, toastMessage, Toast.LENGTH_SHORT).show();
+            if (gotoHomeScreen) {
+                Intent intent = new Intent(ALogin.this, AHome.class);
+                startActivity(intent);
+                finish();
+            }
+            dialog.dismiss();
+        }
     }
 
 }

@@ -11,6 +11,7 @@ public class C {
     public static final String root = "http://192.168.1.104:80/web/kc/";
 
     public static final String STUDENT_VALIDTY  = root + "validity_check.php?";
+    public static final String PASSWORD_CHECKER = root + "password_check.php?";
     public static final String UPDATE_GCM_ID    = root + "update_gcm_id.php";
     public static final String GET_STUDENT_INFO = root + "get_student_info.php?";
     public static final String GET_TIMETABLE    = root + "timetable/get_time_table.php?";

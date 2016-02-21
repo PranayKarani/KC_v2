@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import com.kc.R;
 import com.kc.database.DBHelper;
 import com.kc.database.TTimetable;
@@ -26,14 +27,7 @@ import com.kc.fragments.FHome;
 import com.kc.utilites.RemoteDatabaseConnecter;
 import org.json.JSONObject;
 
-import static com.kc.C.FILE_NAME;
-import static com.kc.C.GET_STUDENT_INFO;
-import static com.kc.C.GET_TIMETABLE;
-import static com.kc.C.MY_GCM_ID;
-import static com.kc.C.MY_ID;
-import static com.kc.C.MY_NAME;
-import static com.kc.C.MY_ROLL;
-import static com.kc.C.MY_SEM;
+import static com.kc.C.*;
 
 public class AHome extends MyActivity {
 
@@ -83,11 +77,6 @@ public class AHome extends MyActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.m_home, menu);
         return true;
@@ -98,7 +87,16 @@ public class AHome extends MyActivity {
 
         int id = item.getItemId();
 
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+        switch (id) {
+            case R.id.logout:
+                SharedPreferences sp = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+                sp.edit().clear().apply();
+                Toast.makeText(this, "logged out!", Toast.LENGTH_SHORT).show();
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
     }
 

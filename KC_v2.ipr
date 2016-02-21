@@ -20,7 +20,7 @@
       </profile>
     </annotationProcessing>
   </component>
-  <component name="DataSourceManagerImpl" format="xml" hash="898027199">
+  <component name="DataSourceManagerImpl" format="xml" hash="1559052344">
     <data-source source="LOCAL" name="MySQL - kc@localhost" uuid="99a4812f-01c7-4015-bb21-7aa16876dbb8">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
@@ -80,6 +80,12 @@
     <option name="PROJECT_PROFILE" value="Project Default" />
     <option name="USE_PROJECT_PROFILE" value="true" />
     <version value="1.0" />
+  </component>
+  <component name="ProjectCodeStyleSettingsManager">
+    <option name="PER_PROJECT_SETTINGS">
+      <value />
+    </option>
+    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default (3)" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
