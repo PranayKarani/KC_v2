@@ -20,15 +20,13 @@
                     android:id="@+id/fhome_schedule_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
                     android:text="Schedule"
-                    android:textSize="22dp"/>
+                    android:textSize="16dp"/>
 
             <LinearLayout
-                    android:id="@+id/fhome_schedule_container"
+                    android:id="@+id/fhome_schedules_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
                     android:orientation="vertical">
 
             </LinearLayout>
@@ -41,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:text="Notifications"
-                    android:textSize="22dp"/>
+                    android:textSize="16dp"/>
 
             <LinearLayout
                     android:id="@+id/fhome_Notification_container"

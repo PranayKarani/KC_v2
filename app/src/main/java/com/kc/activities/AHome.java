@@ -1,5 +1,6 @@
 package com.kc.activities;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -48,26 +49,36 @@ public class AHome extends MyActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.ahome_toolbar);
         setSupportActionBar(toolbar);
 
-        new MyInfoUpdateChecker().execute(null, null, null);
+        /**
+         * This runnable contains fragment loading code that will run only when our
+         * infoUpdater has finished its job.
+         */
+        Runnable loadFragment = new Runnable() {
+            @Override
+            public void run() {
+                /* If notification is tapped, set notification fragment as starting fragment */
+                Log.d(TAG, "loading fragments");
+                int show_this_fragment = getIntent().getIntExtra("show_this", F_HOME);
 
-        /* If notification is tapped, set notification fragment as starting fragment */
-        int show_this_fragment = getIntent().getIntExtra("show_this", F_HOME);
+                Fragment opening_fragment;
+                switch (show_this_fragment) {
 
-        Fragment opening_fragment;
-        switch (show_this_fragment) {
+                    case F_HOME:
+                        opening_fragment = new FHome();
+                        break;
 
-            case F_HOME:
-                opening_fragment = new FHome();
-                break;
+                    default:
+                        opening_fragment = new FHome();
+                        break;
+                }
+                FragmentManager fragma = getSupportFragmentManager();
+                FragmentTransaction fragta = fragma.beginTransaction();
+                fragta.replace(R.id.ahome_framelayout, opening_fragment);
+                fragta.commit();
+            }
+        };
+        new MyInfoUpdateChecker(loadFragment).execute(null, null, null);
 
-            default:
-                opening_fragment = new FHome();
-                break;
-        }
-        FragmentManager fragma = getSupportFragmentManager();
-        FragmentTransaction fragta = fragma.beginTransaction();
-        fragta.replace(R.id.ahome_framelayout, opening_fragment);
-        fragta.commit();
 
     }
 
@@ -99,6 +110,11 @@ public class AHome extends MyActivity {
 
         boolean isConnected = false;
         ProgressBar bar;
+        Runnable    r;
+
+        public MyInfoUpdateChecker(Runnable r) {
+            this.r = r;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -110,24 +126,22 @@ public class AHome extends MyActivity {
         @Override
         public Void doInBackground(Void... params) {
 
-            publishProgress(20);
+            publishProgress(10);
             ConnectivityManager conman = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = conman.getActiveNetworkInfo();
             isConnected = netInfo != null && netInfo.getState().equals(State.CONNECTED);
 
-            publishProgress(40);
             if (isConnected) {
                 String url = GET_STUDENT_INFO + "student_id=" + MY_ID;
 
                 try {
                     RemoteDatabaseConnecter rdc = new RemoteDatabaseConnecter("GET", url).connect(null);
                     JSONObject jo = rdc.getJSONObject();
-                    publishProgress(60);
+                    publishProgress(30);
 
                     if (MY_SEM == jo.getInt("my_sem")) {// todo change to sem < jo
 
                         MY_SEM = jo.getInt("my_sem");
-
 
                         // and delete previous one first
                         DBHelper dbHelper = new DBHelper(AHome.this);
@@ -138,15 +152,41 @@ public class AHome extends MyActivity {
                         url = GET_TIMETABLE + "my_sem=" + MY_SEM;
                         RemoteDatabaseConnecter rdc2 = new RemoteDatabaseConnecter("GET", url).connect(null);
                         JSONObject jo2 = rdc2.getJSONObject();
+                        int progress = 30;
                         for (int i = 1; i <= jo2.length(); i++) {
 
                             JSONObject tmpJo = jo2.getJSONObject("" + i);
 
-                            String subject_name = tmpJo.getString("full_name");
-                            Log.d(TAG, i + "> " + subject_name);
+                            int sub_id = tmpJo.getInt("sub_id");
+                            String sub_full_name = tmpJo.getString("full_name");
+                            String sub_short_name = tmpJo.getString("short_name");
+                            int dow = tmpJo.getInt("dow");
+                            String teacher_name = tmpJo.getString("teacher");
+//                            String stringStart = extractTimefrom(tmpJo.getString("start_time"));
+                            int start_time = tmpJo.getInt("start_time");
+//                            String stringEnd = extractTimefrom(tmpJo.getString("end_time"));
+                            int end_time = tmpJo.getInt("end_time");
+//                            Log.d(TAG, "stringStart = " + stringStart + ", stringEnd = " + stringEnd);
 
+
+                            ContentValues cv = new ContentValues();
+                            cv.put(TTimetable.SUB_ID, sub_id);
+                            cv.put(TTimetable.SUB_full, sub_full_name);
+                            cv.put(TTimetable.SUB_short, sub_short_name);
+                            cv.put(TTimetable.DOW, dow);
+                            cv.put(TTimetable.TEACHER, teacher_name);
+                            cv.put(TTimetable.START_TIME, start_time);
+                            cv.put(TTimetable.END_TIME, end_time);
+
+                            db.insert(TTimetable.NAME, null, cv);
+                            Log.d(TAG, i + ") Inserted value for day " + dow + " start: " + start_time + " end: " + end_time);
+
+                            publishProgress(progress + (i * 2));
 
                         }
+
+                        db.close();
+                        dbHelper.close();
 
                     }
 
@@ -156,7 +196,6 @@ public class AHome extends MyActivity {
                     MY_ROLL = jo.getInt("my_roll");
                     MY_NAME = jo.getString("my_name");
 
-                    publishProgress(80);
                     SharedPreferences sp = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
                     Editor editor = sp.edit();
                     editor.putString("my_student_id", MY_ID);
@@ -166,6 +205,7 @@ public class AHome extends MyActivity {
                     editor.putString("my_name", MY_NAME);
                     editor.apply();
 
+                    publishProgress(80);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -173,7 +213,7 @@ public class AHome extends MyActivity {
 
             }
 
-            publishProgress(100);
+            publishProgress(90);
             return null;
         }
 
@@ -184,8 +224,13 @@ public class AHome extends MyActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            bar.setProgress(100);
             bar.setVisibility(View.GONE);
+            if (r != null) {
+                r.run();
+            }
         }
+
     }
 
 }

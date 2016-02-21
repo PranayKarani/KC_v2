@@ -10,7 +10,7 @@ public class TTimetable {
     public static final String DOW        = "day_of_week";
     public static final String START_TIME = "start_time";
     public static final String END_TIME   = "end_time";
-    public static final String TEACHER    = "teacher_id";
+    public static final String TEACHER    = "teacher";
 
     public String createTable() {
 

@@ -175,7 +175,11 @@ public class ALogin extends MyActivity {
         MY_SEM = sp.getInt("my_sem", -1);
         MY_ROLL = sp.getInt("my_roll", -1);
         MY_NAME = sp.getString("my_name", "notFound");
-        Log.i(TAG, "fileRead details:\nMY_ID = " + MY_ID + "\nMT_NAME = " + MY_NAME + "\nMY_GCM_ID = " + MY_GCM_ID);
+        Log.i(TAG, "fileRead details:\n" +
+                "MY_ID = " + MY_ID + "\n" +
+                "MT_NAME = " + MY_NAME + "\n" +
+                "MY_GCM_ID = " + MY_GCM_ID+"\n" +
+                "MY_SEM = " + MY_SEM + "\n");
         return !MY_ID.equals("notFound");
     }
 

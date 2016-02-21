@@ -68,8 +68,8 @@ public class RemoteDatabaseConnecter {
         }
 
 
-        Log.i(TAG, getServerResponse());
-        Log.v(TAG, "server data:\n" + rawData);
+        Log.i(TAG, getServerResponse() + "\n");
+        Log.v(TAG, "server data:\n" + rawData + "\n");
 
         huc.disconnect();
 
