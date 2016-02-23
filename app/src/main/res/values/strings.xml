@@ -4,4 +4,17 @@
     <string name="title_activity_ahome">Home</string>
     <string name="action_settings">Settings</string>
 
+    <array name="drawer_titles">
+        <item>Home</item>
+        <item>Noticeboard</item>
+        <item>Time Table</item>
+        <item>My details</item>
+        <item>Staff contact</item>
+    </array>
+    <string name="open_drawer">Open drawer</string>
+    <string name="close_drawer">Close drawer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

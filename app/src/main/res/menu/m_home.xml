@@ -2,6 +2,10 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.kc.activities.AHome">
+    <item android:id="@+id/info"
+          android:title="Info"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
     <item android:id="@+id/logout"
           android:title="log out"
           android:orderInCategory="100"

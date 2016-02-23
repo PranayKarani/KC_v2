@@ -1,27 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kc" >
+          package="com.kc">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- For GCM purposes!-->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="com.kc.permission.C2D_MESSAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
 
-        <activity
-            android:name=".activities.ALogin"
-            android:label="@string/app_name" >
+        <activity android:name=".activities.ALogin"
+                  android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".activities.AHome"
-            android:label="@string/title_activity_ahome" >
+        <activity android:name=".activities.AHome"
+                  android:label="@string/title_activity_ahome">
         </activity>
+
+        <receiver android:name="com.google.android.gms.gcm.GcmReceiver"
+                  android:enabled="true"
+                  android:permission="com.google.android.c2dm.permission.SEND"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="com.kc"/>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".services.NoticeListener"
+                 android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+            </intent-filter>
+        </service>
+
 
     </application>
 

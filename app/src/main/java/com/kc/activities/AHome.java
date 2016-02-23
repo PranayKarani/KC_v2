@@ -13,17 +13,24 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.kc.R;
 import com.kc.database.DBHelper;
 import com.kc.database.TTimetable;
 import com.kc.fragments.FHome;
+import com.kc.fragments.FNotice;
 import com.kc.utilites.RemoteDatabaseConnecter;
 import org.json.JSONObject;
 
@@ -35,6 +42,11 @@ public class AHome extends MyActivity {
     public static final int F_NOTICEBOARD    = 2;
     public static       int CURRENT_FRAGMENT = 0;
 
+
+    String[]     drawerTitles;
+    DrawerLayout drawerLayout;
+    ListView     drawerList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,34 +56,23 @@ public class AHome extends MyActivity {
         setSupportActionBar(toolbar);
 
         /**
-         * This runnable contains fragment loading code that will run only when our
+         * This is a runnable that contains fragment loading code that will run only when our
          * infoUpdater has finished its job.
          */
-        Runnable loadFragment = new Runnable() {
-            @Override
-            public void run() {
-                /* If notification is tapped, set notification fragment as starting fragment */
-                Log.d(TAG, "loading fragments");
-                int show_this_fragment = getIntent().getIntExtra("show_this", F_HOME);
+        FragmentLoader loadFragmentAfterInfoRefresh = new FragmentLoader();
+        new InfoRefresher(loadFragmentAfterInfoRefresh).execute(null, null, null);
 
-                Fragment opening_fragment;
-                switch (show_this_fragment) {
 
-                    case F_HOME:
-                        opening_fragment = new FHome();
-                        break;
+        /**
+         * Drawer setup
+         */
+        drawerTitles = getResources().getStringArray(R.array.drawer_titles);
+        drawerLayout = (DrawerLayout) findViewById(R.id.ahome_layout);
 
-                    default:
-                        opening_fragment = new FHome();
-                        break;
-                }
-                FragmentManager fragma = getSupportFragmentManager();
-                FragmentTransaction fragta = fragma.beginTransaction();
-                fragta.replace(R.id.ahome_framelayout, opening_fragment);
-                fragta.commit();
-            }
-        };
-        new MyInfoUpdateChecker(loadFragment).execute(null, null, null);
+        drawerList = (ListView) findViewById(R.id.ahome_drawer_listview);
+        ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, drawerTitles);
+        drawerList.setAdapter(aa);
+        drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 
     }
@@ -88,6 +89,18 @@ public class AHome extends MyActivity {
         int id = item.getItemId();
 
         switch (id) {
+
+            case R.id.info:
+                Toast.makeText(
+                        this,
+                        "My ID:  " + MY_ID + "\n" +
+                                "My NAME:  " + MY_NAME + "\n" +
+                                "My SEM:  " + MY_SEM + "\n" +
+                                "My ROLL:  " + MY_ROLL + "\n\n" +
+                                "My_GCM_ID:\n" + MY_GCM_ID,
+                        Toast.LENGTH_LONG).show();
+                return true;
+
             case R.id.logout:
                 SharedPreferences sp = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
                 sp.edit().clear().apply();
@@ -100,17 +113,49 @@ public class AHome extends MyActivity {
 
     }
 
+    /// Other classes
+
+    /**
+     * Initial fragment loading code
+     */
+    class FragmentLoader implements Runnable {
+
+        @Override
+        public void run() {
+        /* If notification is tapped, set notification fragment as starting fragment */
+            Log.d(TAG, "loading fragments");
+            int show_this_fragment = getIntent().getIntExtra("show_this", F_HOME);
+
+            Fragment opening_fragment;
+            switch (show_this_fragment) {
+
+                case F_HOME:
+                    opening_fragment = new FHome();
+                    break;
+
+                default:
+                    opening_fragment = new FHome();
+                    break;
+            }
+            FragmentManager fragma = getSupportFragmentManager();
+            FragmentTransaction fragta = fragma.beginTransaction();
+            fragta.replace(R.id.ahome_framelayout, opening_fragment);
+            fragta.commit();
+        }
+    }
+
     /**
      * Needed for:
      * 1. my semester change
+     * 2. download new timetable on semester change
      */
-    class MyInfoUpdateChecker extends AsyncTask<Void, Integer, Void> {
+    class InfoRefresher extends AsyncTask<Void, Integer, Void> {
 
         boolean isConnected = false;
         ProgressBar bar;
         Runnable    r;
 
-        public MyInfoUpdateChecker(Runnable r) {
+        public InfoRefresher(Runnable r) {
             this.r = r;
         }
 
@@ -137,7 +182,7 @@ public class AHome extends MyActivity {
                     JSONObject jo = rdc.getJSONObject();
                     publishProgress(30);
 
-                    if (MY_SEM == jo.getInt("my_sem")) {// todo change to sem < jo
+                    if (MY_SEM < jo.getInt("my_sem")) {
 
                         MY_SEM = jo.getInt("my_sem");
 
@@ -231,4 +276,51 @@ public class AHome extends MyActivity {
 
     }
 
+    class DrawerItemClickListener implements OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            FragmentManager fragMa = getSupportFragmentManager();
+            Fragment f = null;
+
+            switch (position) {
+                case 0:
+                    // home
+                    f = new FHome();
+                    break;
+                case 1:
+                    // noticeboard
+                    f = new FNotice();
+                    break;
+                case 2:
+                    // time table
+                    Toast.makeText(AHome.this, "To time table", Toast.LENGTH_SHORT).show();
+                    break;
+                case 3:
+                    // My Details
+                    break;
+                case 4:
+                    // staff contact
+                    break;
+                default:
+                    // home
+                    f = new FHome();
+                    break;
+            }
+
+            FragmentTransaction fragTa = fragMa.beginTransaction();
+            fragTa.replace(R.id.ahome_framelayout, f);
+            fragTa.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragTa.commit();
+
+            setTitle(drawerTitles[position]);
+            drawerList.setItemChecked(position, true);
+
+            LinearLayout dll = (LinearLayout) findViewById(R.id.ahome_drawer_layout);
+            drawerLayout.closeDrawer(dll);
+
+        }
+
+    }
 }
