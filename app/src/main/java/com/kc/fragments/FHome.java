@@ -1,12 +1,15 @@
 package com.kc.fragments;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +21,7 @@ import com.kc.R;
 import com.kc.activities.AHome;
 import com.kc.database.DBHelper;
 import com.kc.database.DBHelper.dbType;
+import com.kc.database.TNoticeboard;
 import com.kc.database.TTimetable;
 import com.kc.other.Lecture;
 import com.kc.utilites.ShrPref;
@@ -112,20 +116,21 @@ public class FHome extends MyFragment {
             LinearLayout container = (LinearLayout) view.findViewById(R.id.fhome_schedules_container);
 
             for (int i = 0; i < lecs.length; i++) {
-                LinearLayout scheduleData = (LinearLayout) FHome.this.getActivity().getLayoutInflater().inflate(R.layout.x_schedule_data, null);
+                CardView lectureCardview = (CardView) FHome.this.getActivity().getLayoutInflater().inflate(R.layout.x_lec_data, null);
 
                 /**
                  * setup the lecture cardview
                  */
-                CardView lectureCardview = (CardView) scheduleData.findViewById(R.id.xScheduleData_actual_container);
-                int sub_color_id = lecs[i].sub_id % 5;
+//                CardView lectureCardview = (CardView) cardView.findViewById(R.id.xScheduleData_actual_container);
+                int sub_color_id = (lecs[i].sub_id % 5) + 1;
                 int sub_color = getColor(sub_color_id);
+                Log.d("log", "sub_id " + sub_color_id);
                 lectureCardview.setCardBackgroundColor(getResources().getColor(sub_color));
 
-                TextView n = (TextView) scheduleData.findViewById(R.id.xScheduleData_sub_name);
+                TextView n = (TextView) lectureCardview.findViewById(R.id.xScheduleData_sub_name);
                 n.setText(lecs[i].short_name);
 
-                TextView t = (TextView) scheduleData.findViewById(R.id.xScheduleData_sub_stime);
+                TextView t = (TextView) lectureCardview.findViewById(R.id.xScheduleData_sub_stime);
                 t.setText(lecs[i].getFormatedStartTime());
 
                 final int finalI = i;
@@ -145,7 +150,7 @@ public class FHome extends MyFragment {
                     }
                 });
 
-                container.addView(scheduleData);
+                container.addView(lectureCardview);
 
             }
 
@@ -169,15 +174,63 @@ public class FHome extends MyFragment {
         }
     }
 
-    class NoticeDisplayer extends AsyncTask<Void, Void, Void> {
+    class NoticeDisplayer extends AsyncTask<Void, Void, Cursor> {
+
+        Activity stupidActivity;
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected void onPreExecute() {
+            stupidActivity = FHome.this.getActivity();
+        }
+
+        @Override
+        protected Cursor doInBackground(Void... params) {
 
             DBHelper dbh = new DBHelper(stupidContext, dbType.READ);
 
+            return dbh.rawQuery(
+                    "SELECT * FROM " + TNoticeboard.TABLE_NAME + " ORDER BY "
+                            + TNoticeboard.READ + " ASC,"
+                            + TNoticeboard.FAV + " DESC,"
+                            + TNoticeboard.DATE + " DESC,"
+                            + TNoticeboard.TIME + " DESC");
 
-            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Cursor c) {
+            LinearLayout home_notice_container = (LinearLayout) stupidActivity.findViewById(R.id.fhome_Notification_container);
+            if (c.getCount() > 0) {
+                c.moveToFirst();
+                do {
+
+                    CardView cardView = (CardView) stupidActivity.getLayoutInflater().inflate(R.layout.x_notice_header, null);
+
+                    TextView tv = (TextView) cardView.findViewById(R.id.notice_header);
+
+                    String notice_header = c.getString(c.getColumnIndex(TNoticeboard.HEADER));
+
+                    tv.setText(notice_header);
+
+                    home_notice_container.addView(cardView);
+
+                    cardView.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            FragmentTransaction ft = FHome.this.getActivity().getSupportFragmentManager().beginTransaction();
+                            ft.replace(R.id.ahome_framelayout, new FNoticeboard());
+                            ft.addToBackStack(null);
+                            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                            ft.commit();
+
+                        }
+                    });
+
+
+                } while (c.moveToNext());
+            }
+            c.close();
         }
     }
 

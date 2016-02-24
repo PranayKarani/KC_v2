@@ -5,4 +5,7 @@
     <color name="sub_3">#ff9fa8da</color>
     <color name="sub_4">#ffffcc80</color>
     <color name="sub_5">#ffce93d8</color>
+    <color name="fav_notice">#c5f1ca</color>
+    <color name="read_notice">#d5d5d5</color>
+
 </resources>

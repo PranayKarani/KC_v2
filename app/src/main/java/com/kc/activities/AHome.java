@@ -29,7 +29,7 @@ import com.kc.database.DBHelper;
 import com.kc.database.DBHelper.dbType;
 import com.kc.database.TTimetable;
 import com.kc.fragments.FHome;
-import com.kc.fragments.FNotice;
+import com.kc.fragments.FNoticeboard;
 import com.kc.utilites.RemoteDatabaseConnecter;
 import com.kc.utilites.ShrPref;
 import org.json.JSONObject;
@@ -286,7 +286,7 @@ public class AHome extends MyActivity {
                     break;
                 case 1:
                     // noticeboard
-                    f = new FNotice();
+                    f = new FNoticeboard();
                     break;
                 case 2:
                     // time table
