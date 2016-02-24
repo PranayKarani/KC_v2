@@ -3,7 +3,6 @@ package com.kc.fragments;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,15 +17,19 @@ import android.widget.Toast;
 import com.kc.R;
 import com.kc.activities.AHome;
 import com.kc.database.DBHelper;
+import com.kc.database.DBHelper.dbType;
 import com.kc.database.TTimetable;
 import com.kc.other.Lecture;
+import com.kc.utilites.ShrPref;
 
 import java.util.Calendar;
 
 public class FHome extends MyFragment {
 
     Context stupidContext;
-    
+
+    int noof_notices;
+
     public FHome() {
         super();
     }
@@ -36,6 +39,7 @@ public class FHome extends MyFragment {
         super.onAttach(context);
         stupidContext = context;
         AHome.CURRENT_FRAGMENT = AHome.F_HOME;
+        noof_notices = ShrPref.readData(context, "noof_notice", 0);
     }
     
     @Override
@@ -49,6 +53,11 @@ public class FHome extends MyFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         new LocalTimetableFetcher(view).execute(null, null, null);
+
+        if (noof_notices > 0) {
+            new NoticeDisplayer().execute(null, null, null);
+        }
+
     }
 
     class LocalTimetableFetcher extends AsyncTask<Void, Void, Lecture[]> {
@@ -70,10 +79,9 @@ public class FHome extends MyFragment {
             // load today's schedule
             int dayToday = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 
-            DBHelper dbh = new DBHelper(stupidContext);
-            SQLiteDatabase db = dbh.getReadableDatabase();
+            DBHelper dbh = new DBHelper(stupidContext, dbType.READ);
 
-            Cursor c = db.rawQuery("SELECT * FROM " + TTimetable.NAME + " WHERE " + TTimetable.DOW + " = " + dayToday, null);
+            Cursor c = dbh.rawQuery("SELECT * FROM " + TTimetable.NAME + " WHERE " + TTimetable.DOW + " = " + dayToday);
             c.moveToFirst();
 
             Lecture[] lecs = new Lecture[c.getCount()];
@@ -158,6 +166,18 @@ public class FHome extends MyFragment {
                 default:
                     return R.color.sub_1;// TODO change this default color
             }
+        }
+    }
+
+    class NoticeDisplayer extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            DBHelper dbh = new DBHelper(stupidContext, dbType.READ);
+
+
+            return null;
         }
     }
 

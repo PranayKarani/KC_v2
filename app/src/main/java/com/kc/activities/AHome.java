@@ -3,8 +3,6 @@ package com.kc.activities;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
@@ -28,10 +26,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.kc.R;
 import com.kc.database.DBHelper;
+import com.kc.database.DBHelper.dbType;
 import com.kc.database.TTimetable;
 import com.kc.fragments.FHome;
 import com.kc.fragments.FNotice;
 import com.kc.utilites.RemoteDatabaseConnecter;
+import com.kc.utilites.ShrPref;
 import org.json.JSONObject;
 
 import static com.kc.C.*;
@@ -187,9 +187,8 @@ public class AHome extends MyActivity {
                         MY_SEM = jo.getInt("my_sem");
 
                         // and delete previous one first
-                        DBHelper dbHelper = new DBHelper(AHome.this);
-                        SQLiteDatabase db = dbHelper.getWritableDatabase();
-                        db.execSQL("DELETE FROM " + TTimetable.NAME);
+                        DBHelper dbHelper = new DBHelper(AHome.this, dbType.WRITE);
+                        dbHelper.execSQL("DELETE FROM " + TTimetable.NAME);
 
                         // todo load new time table for new sem
                         url = GET_TIMETABLE + "my_sem=" + MY_SEM;
@@ -221,14 +220,13 @@ public class AHome extends MyActivity {
                             cv.put(TTimetable.START_TIME, start_time);
                             cv.put(TTimetable.END_TIME, end_time);
 
-                            db.insert(TTimetable.NAME, null, cv);
+                            dbHelper.insert(TTimetable.NAME, cv);
                             Log.d(TAG, i + ") Inserted value for day " + dow + " start: " + start_time + " end: " + end_time);
 
                             publishProgress(progress + (i * 2));
 
                         }
 
-                        db.close();
                         dbHelper.close();
 
                     }
@@ -239,14 +237,11 @@ public class AHome extends MyActivity {
                     MY_ROLL = jo.getInt("my_roll");
                     MY_NAME = jo.getString("my_name");
 
-                    SharedPreferences sp = getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
-                    Editor editor = sp.edit();
-                    editor.putString("my_student_id", MY_ID);
-                    editor.putString("my_gcm_id", MY_GCM_ID);
-                    editor.putInt("my_sem", MY_SEM);
-                    editor.putInt("my_roll", MY_ROLL);
-                    editor.putString("my_name", MY_NAME);
-                    editor.apply();
+                    ShrPref.writeData(AHome.this, "my_student_id", MY_ID);
+                    ShrPref.writeData(AHome.this, "my_gcm_id", MY_GCM_ID);
+                    ShrPref.writeData(AHome.this, "my_sem", MY_SEM);
+                    ShrPref.writeData(AHome.this, "my_roll", MY_ROLL);
+                    ShrPref.writeData(AHome.this, "my_name", MY_NAME);
 
                     publishProgress(80);
 
