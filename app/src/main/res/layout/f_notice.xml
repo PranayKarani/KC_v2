@@ -14,44 +14,56 @@
                       android:layout_width="match_parent"
                       android:orientation="vertical">
 
+            <TextView
+                    android:id="@+id/fnotice_unread_bucket_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textStyle="italic"
+                    android:text="Unread"/>
             <LinearLayout android:id="@+id/unread_bucket"
                           android:orientation="vertical"
                           android:layout_width="match_parent"
                           android:layout_height="match_parent"
                           android:layout_marginBottom="4dp">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textStyle="italic"
-                        android:text="Unread"/>
             </LinearLayout>
 
+            <TextView
+                    android:id="@+id/fnotice_fav_bucket_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textStyle="italic"
+                    android:text="Favorite"/>
             <LinearLayout android:id="@+id/fav_bucket"
                           android:orientation="vertical"
                           android:layout_width="match_parent"
                           android:layout_height="match_parent"
                           android:layout_marginBottom="4dp">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textStyle="italic"
-                        android:text="Favorite"/>
             </LinearLayout>
 
+            <TextView
+                    android:id="@+id/fnotice_read_bucket_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textStyle="italic"
+                    android:text="Read"/>
             <LinearLayout android:id="@+id/read_bucket"
                           android:orientation="vertical"
                           android:layout_width="match_parent"
                           android:layout_height="match_parent"
                           android:layout_marginBottom="4dp">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textStyle="italic"
-                        android:text="Read"/>
             </LinearLayout>
+
+            <TextView
+                    android:id="@+id/fnotice_empty_inbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textStyle="italic"
+                    android:textColor="#646464"
+                    android:text="Wow! an empty inbox!" android:layout_gravity="center"/>
 
         </LinearLayout>
 

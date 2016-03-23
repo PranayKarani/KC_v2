@@ -63,7 +63,14 @@ public class ANoticeViewer extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.m_noticeviewer, menu);
         return true;
     }
-    
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.favorite).setIcon(fav ? android.R.drawable.star_big_on : android.R.drawable.star_big_off);
+        menu.findItem(R.id.favorite).setTitle(fav ? "un-favorite" : "favorite");
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -75,6 +82,7 @@ public class ANoticeViewer extends AppCompatActivity {
                 item.setIcon(fav ? android.R.drawable.star_big_off : android.R.drawable.star_big_on);
                 item.setTitle(fav ? "un-favorite" : "favorite");
                 dbh.update(TNoticeboard.TABLE_NAME, cv, TNoticeboard.ID + " = " + ID, null);
+                fav = !fav;
                 return true;
 
             case R.id.delete:

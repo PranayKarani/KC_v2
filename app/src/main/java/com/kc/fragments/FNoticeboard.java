@@ -19,7 +19,6 @@ import com.kc.activities.ANoticeViewer;
 import com.kc.database.DBHelper;
 import com.kc.database.DBHelper.dbType;
 import com.kc.database.TNoticeboard;
-import com.kc.utilites.ShrPref;
 
 public class FNoticeboard extends MyFragment {
 
@@ -46,7 +45,6 @@ public class FNoticeboard extends MyFragment {
     @Override
     public void onStart() {
         super.onStart();
-        ShrPref.writeData(stupidContext, "noof_notice", 0);
         new NoticesLoader().execute(null, null, null);
     }
 
@@ -55,25 +53,14 @@ public class FNoticeboard extends MyFragment {
         super.onStop();
 
         LinearLayout urb = (LinearLayout) getActivity().findViewById(R.id.unread_bucket);
-        for (int i = 0; i < urb.getChildCount(); i++) {
-            if (urb.getChildAt(i) instanceof CardView) {
-                urb.removeViewAt(i);
-            }
-        }
+        urb.removeAllViews();
 
         LinearLayout fb = (LinearLayout) getActivity().findViewById(R.id.fav_bucket);
-        for (int i = 0; i < fb.getChildCount(); i++) {
-            if (fb.getChildAt(i) instanceof CardView) {
-                fb.removeViewAt(i);
-            }
-        }
+        fb.removeAllViews();
 
         LinearLayout rb = (LinearLayout) getActivity().findViewById(R.id.read_bucket);
-        for (int i = 0; i < rb.getChildCount(); i++) {
-            if (rb.getChildAt(i) instanceof CardView) {
-                rb.removeViewAt(i);
-            }
-        }
+        rb.removeAllViews();
+
     }
 
     private class NoticesLoader extends AsyncTask<Void, Void, Cursor> {
@@ -97,16 +84,21 @@ public class FNoticeboard extends MyFragment {
         @Override
         public void onPostExecute(Cursor c) {
 
+            // declare buckets and there headers
+            TextView urbt = (TextView) getActivity().findViewById(R.id.fnotice_unread_bucket_header);
+            LinearLayout urb = (LinearLayout) getActivity().findViewById(R.id.unread_bucket);
+            TextView fbt = (TextView) getActivity().findViewById(R.id.fnotice_fav_bucket_header);
+            LinearLayout fb = (LinearLayout) getActivity().findViewById(R.id.fav_bucket);
+            TextView rbt = (TextView) getActivity().findViewById(R.id.fnotice_read_bucket_header);
+            LinearLayout rb = (LinearLayout) getActivity().findViewById(R.id.read_bucket);
+
+            TextView emptyIndox = (TextView) getActivity().findViewById(R.id.fnotice_empty_inbox);
+
             if (c.getCount() > 0) {
 
                 c.moveToFirst();
 
                 int unread = 0, fav = 0, read = 0;
-
-                // declare buckets
-                LinearLayout urb = (LinearLayout) getActivity().findViewById(R.id.unread_bucket);
-                LinearLayout fb = (LinearLayout) getActivity().findViewById(R.id.fav_bucket);
-                LinearLayout rb = (LinearLayout) getActivity().findViewById(R.id.read_bucket);
 
                 do {
 
@@ -130,10 +122,23 @@ public class FNoticeboard extends MyFragment {
 
                 } while (c.moveToNext());
 
-                urb.setVisibility(unread == 0 ? View.GONE : View.VISIBLE);
-                fb.setVisibility(fav == 0 ? View.GONE : View.VISIBLE);
-                rb.setVisibility(read == 0 ? View.GONE : View.VISIBLE);
+//                ShrPref.writeData(stupidContext, C.UNREAD_COUNT, unread);
+//                ShrPref.writeData(stupidContext, C.FAV_COUNT, fav);
+//                ShrPref.writeData(stupidContext, C.READ_COUNT, read);
 
+                urbt.setVisibility(unread == 0 ? View.GONE : View.VISIBLE);
+                urb.setVisibility(unread == 0 ? View.GONE : View.VISIBLE);
+                fbt.setVisibility(fav == 0 ? View.GONE : View.VISIBLE);
+                fb.setVisibility(fav == 0 ? View.GONE : View.VISIBLE);
+                rbt.setVisibility(read == 0 ? View.GONE : View.VISIBLE);
+                rb.setVisibility(read == 0 ? View.GONE : View.VISIBLE);
+                emptyIndox.setVisibility(View.GONE);
+
+            } else {
+                emptyIndox.setVisibility(View.VISIBLE);
+                urbt.setVisibility(View.GONE);
+                fbt.setVisibility(View.GONE);
+                rbt.setVisibility(View.GONE);
             }
             c.close();
             dbh.close();
@@ -186,7 +191,7 @@ public class FNoticeboard extends MyFragment {
             return cv;
         }
 
-        View inflate_notice(Cursor c, boolean fav) {
+        View inflate_notice(Cursor c, final boolean fav) {
 
             // extract data
             final int ID = c.getInt(c.getColumnIndex(TNoticeboard.ID));
@@ -215,7 +220,7 @@ public class FNoticeboard extends MyFragment {
                     i.putExtra("ID", ID);
                     i.putExtra("header", header);
                     i.putExtra("body", body);
-                    i.putExtra("fav", true);
+                    i.putExtra("fav", fav);
                     i.putExtra("date", date);
                     i.putExtra("time", time);
                     startActivity(i);
