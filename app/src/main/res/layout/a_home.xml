@@ -42,18 +42,18 @@
 
     <LinearLayout
             android:id="@+id/ahome_drawer_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start|bottom"
             android:choiceMode="singleChoice"
-            android:background="#37633a"
+            android:background="#375c61"
             android:orientation="vertical"
             android:elevation="16dp"
             android:dividerPadding="2dp">
 
         <ListView
                 android:id="@+id/ahome_drawer_listview"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:choiceMode="singleChoice"
                 android:dividerHeight="0dp"

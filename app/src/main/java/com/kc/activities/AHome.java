@@ -1,29 +1,29 @@
 package com.kc.activities;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 import com.kc.R;
 import com.kc.database.DBHelper;
 import com.kc.database.DBHelper.dbType;
@@ -38,14 +38,14 @@ import static com.kc.C.*;
 
 public class AHome extends MyActivity {
 
-    public static final int F_HOME           = 1;
-    public static final int F_NOTICEBOARD    = 2;
-    public static       int CURRENT_FRAGMENT = 0;
+    public static final int F_HOME = 1;
+    public static final int F_NOTICEBOARD = 2;
+    public static int CURRENT_FRAGMENT = 0;
 
 
-    String[]     drawerTitles;
+    String[] drawerTitles;
     DrawerLayout drawerLayout;
-    ListView     drawerList;
+    ListView drawerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class AHome extends MyActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.ahome_toolbar);
         setSupportActionBar(toolbar);
 
-        /**
+        /*
          * This is a runnable that contains fragment loading code that will run only when our
          * infoUpdater has finished its job.
          */
@@ -113,6 +113,48 @@ public class AHome extends MyActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if (CURRENT_FRAGMENT == F_HOME) {
+            new DialogFragment() {
+
+                /* Exit */
+
+                @NonNull
+                @Override
+                public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+                    AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
+                    ab.setMessage("Exit app?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dismiss();
+                                    getActivity().finish();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dismiss();
+                                }
+                            });
+
+                    return ab.create();
+                }
+
+            }.show(getSupportFragmentManager(), "ExitConfirmation_tag");
+
+        } else {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.ahome_framelayout, new FHome());
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            ft.commit();
+            invalidateOptionsMenu();
+        }
+    }
+
     /// Other classes
 
     /**
@@ -148,12 +190,13 @@ public class AHome extends MyActivity {
      * Needed for:
      * 1. my semester change
      * 2. download new timetable on semester change
+     * 3. attendance update
      */
     class InfoRefresher extends AsyncTask<Void, Integer, Void> {
 
         boolean isConnected = false;
         ProgressBar bar;
-        Runnable    r;
+        Runnable r;
 
         public InfoRefresher(Runnable r) {
             this.r = r;

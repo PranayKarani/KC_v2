@@ -81,16 +81,16 @@ public class FHome extends MyFragment {
         protected Lecture[] doInBackground(Void... params) {
 
             // load today's schedule
-            int dayToday = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+            int dayToday = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
 
             DBHelper dbh = new DBHelper(stupidContext, dbType.READ);
 
             Cursor c = dbh.rawQuery("SELECT * FROM " + TTimetable.NAME + " WHERE " + TTimetable.DOW + " = " + dayToday);
-            c.moveToFirst();
+//            c.mo;
 
             Lecture[] lecs = new Lecture[c.getCount()];
 
-            do {
+            while (c.moveToNext()) {
 
                 Lecture l = new Lecture();
 
@@ -104,7 +104,7 @@ public class FHome extends MyFragment {
 
                 lecs[c.getPosition()] = l;
 
-            } while (c.moveToNext());
+            }
 
 
             return lecs;

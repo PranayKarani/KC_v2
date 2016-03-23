@@ -2,8 +2,16 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.kc.activities.ANoticeViewer">
-    <item android:id="@+id/action_settings"
-          android:title="@string/action_settings"
-          android:orderInCategory="100"
-          app:showAsAction="never"/>
+    <item
+            android:id="@+id/favorite"
+            android:icon="@android:drawable/star_big_off"
+            android:title="favorite"
+            android:orderInCategory="1"
+            app:showAsAction="ifRoom"/>
+    <item
+            android:id="@+id/delete"
+            android:icon="@android:drawable/ic_menu_delete"
+            android:title="delete"
+            android:orderInCategory="2"
+            app:showAsAction="ifRoom"/>
 </menu>

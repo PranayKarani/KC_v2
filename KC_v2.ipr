@@ -20,21 +20,6 @@
       </profile>
     </annotationProcessing>
   </component>
-  <component name="DataSourceManagerImpl" format="xml" hash="1559052344">
-    <data-source source="LOCAL" name="MySQL - kc@localhost" uuid="99a4812f-01c7-4015-bb21-7aa16876dbb8">
-      <driver-ref>mysql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost/kc</jdbc-url>
-      <driver-properties>
-        <property name="zeroDateTimeBehavior" value="convertToNull" />
-        <property name="tinyInt1isBit" value="false" />
-        <property name="characterEncoding" value="utf8" />
-        <property name="characterSetResults" value="utf8" />
-        <property name="yearIsDateType" value="false" />
-      </driver-properties>
-    </data-source>
-  </component>
   <component name="Encoding">
     <file url="PROJECT" charset="UTF-8" />
   </component>
@@ -48,12 +33,6 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleJvm" value="1.8" />
         <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
-          </set>
-        </option>
-        <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
@@ -89,7 +68,7 @@
         </XML>
       </value>
     </option>
-    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default (3)" />
+    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -103,8 +82,8 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/KC_v2.iml" filepath="$PROJECT_DIR$/KC_v2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/KC_v2.iml" filepath="$PROJECT_DIR$/.idea/modules/KC_v2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="false" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
@@ -113,25 +92,8 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
-  <component name="RunConfigurationProducerService">
-    <option name="ignoredProducers">
-      <set>
-        <option value="org.jetbrains.plugins.gradle.execution.test.runner.AllInPackageGradleConfigurationProducer" />
-        <option value="org.jetbrains.plugins.gradle.execution.test.runner.TestClassGradleConfigurationProducer" />
-        <option value="org.jetbrains.plugins.gradle.execution.test.runner.TestMethodGradleConfigurationProducer" />
-      </set>
-    </option>
-  </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-  </component>
-  <component name="dataSourceStorageLocal">
-    <data-source name="MySQL - kc@localhost" uuid="99a4812f-01c7-4015-bb21-7aa16876dbb8">
-      <secret-storage>master_key</secret-storage>
-      <user-name>Pranay</user-name>
-      <schema-pattern>kc.*</schema-pattern>
-      <default-schemas>kc.*</default-schemas>
-    </data-source>
   </component>
   <component name="libraryTable">
     <library name="appcompat-v7-23.1.1">

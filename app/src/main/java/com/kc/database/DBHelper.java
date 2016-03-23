@@ -66,6 +66,14 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.insert(table_name, null, cv);
     }
 
+    public int update(String tableName, ContentValues cv, String where, String[] args) {
+        return db.update(tableName, cv, where, args);
+    }
+
+    public int delete(String tableName, String where, String[] args) {
+        return db.delete(tableName, where, args);
+    }
+
     public enum dbType {
         READ, WRITE
     }

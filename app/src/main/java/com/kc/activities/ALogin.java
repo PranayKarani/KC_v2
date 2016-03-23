@@ -35,7 +35,7 @@ public class ALogin extends MyActivity {
         if (fileReadSuccess()) {
 
             Intent intent = new Intent(this, AHome.class);
-            startActivity(intent);
+            startActivity(intent);// AHome
             Toast.makeText(ALogin.this, "Welcome " + MY_NAME, Toast.LENGTH_SHORT).show();
             finish();
 
