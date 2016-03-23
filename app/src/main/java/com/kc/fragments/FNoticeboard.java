@@ -19,10 +19,11 @@ import com.kc.activities.ANoticeViewer;
 import com.kc.database.DBHelper;
 import com.kc.database.DBHelper.dbType;
 import com.kc.database.TNoticeboard;
+import com.kc.utilites.ShrPref;
 
 public class FNoticeboard extends MyFragment {
 
-    Context stupidContext;
+    private Context stupidContext;
     
     public FNoticeboard() {
         // Required empty public constructor
@@ -45,6 +46,7 @@ public class FNoticeboard extends MyFragment {
     @Override
     public void onStart() {
         super.onStart();
+        ShrPref.writeData(stupidContext, "noof_notice", 0);
         new NoticesLoader().execute(null, null, null);
     }
 
@@ -74,12 +76,14 @@ public class FNoticeboard extends MyFragment {
         }
     }
 
-    class NoticesLoader extends AsyncTask<Void, Void, Cursor> {
+    private class NoticesLoader extends AsyncTask<Void, Void, Cursor> {
+
+        DBHelper dbh;
 
         @Override
         public Cursor doInBackground(Void[] params) {
 
-            DBHelper dbh = new DBHelper(stupidContext, dbType.READ);
+            dbh = new DBHelper(stupidContext, dbType.READ);
 
             return dbh.rawQuery(
                     "SELECT * FROM " + TNoticeboard.TABLE_NAME + " ORDER BY "
@@ -132,6 +136,7 @@ public class FNoticeboard extends MyFragment {
 
             }
             c.close();
+            dbh.close();
 
         }
 

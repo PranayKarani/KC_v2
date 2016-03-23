@@ -45,7 +45,7 @@ public class FHome extends MyFragment {
         AHome.CURRENT_FRAGMENT = AHome.F_HOME;
         noof_notices = ShrPref.readData(context, "noof_notice", 0);
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -58,9 +58,7 @@ public class FHome extends MyFragment {
         super.onViewCreated(view, savedInstanceState);
         new LocalTimetableFetcher(view).execute(null, null, null);
 
-        if (noof_notices > 0) {
-            new NoticeDisplayer().execute(null, null, null);
-        }
+        new NoticeDisplayer().execute(null, null, null);
 
     }
 
@@ -86,7 +84,6 @@ public class FHome extends MyFragment {
             DBHelper dbh = new DBHelper(stupidContext, dbType.READ);
 
             Cursor c = dbh.rawQuery("SELECT * FROM " + TTimetable.NAME + " WHERE " + TTimetable.DOW + " = " + dayToday);
-//            c.mo;
 
             Lecture[] lecs = new Lecture[c.getCount()];
 
@@ -139,13 +136,13 @@ public class FHome extends MyFragment {
                     public void onClick(View v) {
 
                         Toast.makeText(stupidContext,
-                                       "Lecture name: " + lecs[finalI].full_name + "\n" +
-                                               "Subject ID: " + lecs[finalI].sub_id + "\n" +
-                                               "teacher: " + lecs[finalI].teacher + "\n" +
-                                               "Start time: " + lecs[finalI].getFormatedStartTime() + "\n" +
-                                               "End time: " + lecs[finalI].getFormatedEndTime(),
+                                "Lecture name: " + lecs[finalI].full_name + "\n" +
+                                        "Subject ID: " + lecs[finalI].sub_id + "\n" +
+                                        "teacher: " + lecs[finalI].teacher + "\n" +
+                                        "Start time: " + lecs[finalI].getFormatedStartTime() + "\n" +
+                                        "End time: " + lecs[finalI].getFormatedEndTime(),
 
-                                       Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -174,7 +171,7 @@ public class FHome extends MyFragment {
         }
     }
 
-    class NoticeDisplayer extends AsyncTask<Void, Void, Cursor> {
+    private class NoticeDisplayer extends AsyncTask<Void, Void, Cursor> {
 
         Activity stupidActivity;
 
@@ -189,7 +186,7 @@ public class FHome extends MyFragment {
             DBHelper dbh = new DBHelper(stupidContext, dbType.READ);
 
             return dbh.rawQuery(
-                    "SELECT * FROM " + TNoticeboard.TABLE_NAME + " ORDER BY "
+                    "SELECT * FROM " + TNoticeboard.TABLE_NAME + " WHERE " + TNoticeboard.READ + " = 0 ORDER BY "
                             + TNoticeboard.READ + " ASC,"
                             + TNoticeboard.FAV + " DESC,"
                             + TNoticeboard.DATE + " DESC,"
@@ -201,6 +198,7 @@ public class FHome extends MyFragment {
         protected void onPostExecute(Cursor c) {
             LinearLayout home_notice_container = (LinearLayout) stupidActivity.findViewById(R.id.fhome_Notification_container);
             if (c.getCount() > 0) {
+                stupidActivity.findViewById(R.id.fhome_Notification_header).setVisibility(View.VISIBLE);
                 c.moveToFirst();
                 do {
 
@@ -229,6 +227,10 @@ public class FHome extends MyFragment {
 
 
                 } while (c.moveToNext());
+            } else {
+
+                stupidActivity.findViewById(R.id.fhome_Notification_header).setVisibility(View.GONE);
+
             }
             c.close();
         }
