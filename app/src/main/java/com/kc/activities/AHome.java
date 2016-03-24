@@ -30,6 +30,7 @@ import com.kc.database.DBHelper.dbType;
 import com.kc.database.TTimetable;
 import com.kc.fragments.FHome;
 import com.kc.fragments.FNoticeboard;
+import com.kc.fragments.FTimeTable;
 import com.kc.utilites.RemoteDatabaseConnecter;
 import com.kc.utilites.ShrPref;
 import org.json.JSONObject;
@@ -40,6 +41,7 @@ public class AHome extends MyActivity {
 
     public static final int F_HOME = 1;
     public static final int F_NOTICEBOARD = 2;
+    public static final int F_TIMETABLE = 3;
     public static int CURRENT_FRAGMENT = 0;
 
 
@@ -225,7 +227,7 @@ public class AHome extends MyActivity {
                     JSONObject jo = rdc.getJSONObject();
                     publishProgress(30);
 
-                    if (MY_SEM < jo.getInt("my_sem")) {
+//                    if (MY_SEM < jo.getInt("my_sem")) {
 
                         MY_SEM = jo.getInt("my_sem");
 
@@ -272,7 +274,7 @@ public class AHome extends MyActivity {
 
                         dbHelper.close();
 
-                    }
+//                    }
 
                     MY_ID = jo.getString("my_id");
                     MY_GCM_ID = jo.getString("my_gcm_id");
@@ -333,7 +335,7 @@ public class AHome extends MyActivity {
                     break;
                 case 2:
                     // time table
-                    Toast.makeText(AHome.this, "To time table", Toast.LENGTH_SHORT).show();
+                    f = new FTimeTable();
                     break;
                 case 3:
                     // My Details

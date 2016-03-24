@@ -62,7 +62,7 @@ public class FHome extends MyFragment {
 
     }
 
-    class LocalTimetableFetcher extends AsyncTask<Void, Void, Lecture[]> {
+    private class LocalTimetableFetcher extends AsyncTask<Void, Void, Lecture[]> {
 
         View view;
 
