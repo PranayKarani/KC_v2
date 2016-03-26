@@ -5,11 +5,11 @@
     <string name="action_settings">Settings</string>
 
     <array name="drawer_titles">
-        <item>Home</item>
+        <!--<item>Home</item>-->
         <item>Noticeboard</item>
+        <item>My Attendance</item>
         <item>Time Table</item>
         <item>My details</item>
-        <item>Staff contact</item>
     </array>
     <string name="open_drawer">Open drawer</string>
     <string name="close_drawer">Close drawer</string>

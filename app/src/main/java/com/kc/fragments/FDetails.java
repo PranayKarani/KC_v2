@@ -46,8 +46,6 @@ public class FDetails extends MyFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final View aView = view;
-
         ((TextView) view.findViewById(R.id.fdetails_name)).setText(C.MY_NAME);
         ((TextView) view.findViewById(R.id.fdetails_rollno)).setText("" + C.MY_ROLL);
         ((TextView) view.findViewById(R.id.fdetails_id)).setText(C.MY_ID);

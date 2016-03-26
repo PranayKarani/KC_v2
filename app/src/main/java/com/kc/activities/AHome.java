@@ -330,11 +330,11 @@ public class AHome extends MyActivity {
 
             switch (position) {
                 case 0:
-                    // home
-                    f = new FHome();
+                    // NOticeboard
+                    f = new FNoticeboard();
                     break;
                 case 1:
-                    // noticeboard
+                    // Attendance
                     f = new FNoticeboard();
                     break;
                 case 2:
@@ -345,9 +345,7 @@ public class AHome extends MyActivity {
                     // My Details
                     f = new FDetails();
                     break;
-                case 4:
-                    // staff contact
-                    break;
+
                 default:
                     // home
                     f = new FHome();
