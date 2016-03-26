@@ -10,11 +10,9 @@ import java.io.IOException;
 
 public class MyJson {
 
-    static String fileName = "attendance.json";
-
-    public static void saveData(Context context, String mJsonResponse) {
+    public static void saveData(Context context, String mJsonResponse, String filename) {
         try {
-            FileWriter file = new FileWriter(context.getFilesDir().getPath() + "/" + fileName);
+            FileWriter file = new FileWriter(context.getFilesDir().getPath() + "/" + filename);
             file.write(mJsonResponse);
             file.flush();
             file.close();
@@ -23,9 +21,9 @@ public class MyJson {
         }
     }
 
-    public static String getData(Context context) {
+    public static String getData(Context context, String filename) {
         try {
-            File f = new File(context.getFilesDir().getPath() + "/" + fileName);
+            File f = new File(context.getFilesDir().getPath() + "/" + filename);
             //check whether file exists
             FileInputStream is = new FileInputStream(f);
             int size = is.available();

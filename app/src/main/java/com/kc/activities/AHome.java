@@ -26,6 +26,7 @@ import com.kc.database.DBHelper;
 import com.kc.database.DBHelper.dbType;
 import com.kc.database.TTimetable;
 import com.kc.fragments.*;
+import com.kc.utilites.MyJson;
 import com.kc.utilites.Network;
 import com.kc.utilites.RemoteDatabaseConnecter;
 import com.kc.utilites.ShrPref;
@@ -215,61 +216,69 @@ public class AHome extends MyActivity {
             publishProgress(10);
 
             if (Network.isConnectedToInternet(AHome.this)) {
-                String url = GET_STUDENT_INFO + "student_id=" + MY_ID;
+
+                String url;
 
                 try {
-                    RemoteDatabaseConnecter rdc = new RemoteDatabaseConnecter("GET", url).connect(null);
-                    JSONObject jo = rdc.getJSONObject();
+
+                    // Get student details
+                    url = GET_STUDENT_INFO + "student_id=" + MY_ID;
+                    RemoteDatabaseConnecter rdc1 = new RemoteDatabaseConnecter("GET", url).connect(null);
+                    JSONObject jo = rdc1.getJSONObject();
                     publishProgress(30);
 
-//                    if (MY_SEM < jo.getInt("my_sem")) {
+                    // get new time table if received semester is greater than current
+                    if (MY_SEM < jo.getInt("my_sem")) {
 
-                    MY_SEM = jo.getInt("my_sem");
+                        MY_SEM = jo.getInt("my_sem");
 
-                    // and delete previous one first
-                    DBHelper dbHelper = new DBHelper(AHome.this, dbType.WRITE);
-                    dbHelper.execSQL("DELETE FROM " + TTimetable.NAME);
+                        // but delete previous one first
+                        DBHelper dbHelper = new DBHelper(AHome.this, dbType.WRITE);
+                        dbHelper.execSQL("DELETE FROM " + TTimetable.NAME);
 
-                    // todo load new time table for new sem
-                    url = GET_TIMETABLE + "my_sem=" + MY_SEM;
-                    RemoteDatabaseConnecter rdc2 = new RemoteDatabaseConnecter("GET", url).connect(null);
-                    JSONObject jo2 = rdc2.getJSONObject();
-                    int progress = 30;
-                    for (int i = 1; i <= jo2.length(); i++) {
+                        url = GET_TIMETABLE + "my_sem=" + MY_SEM;
+                        RemoteDatabaseConnecter rdc2 = new RemoteDatabaseConnecter("GET", url).connect(null);
+                        JSONObject jo2 = rdc2.getJSONObject();
+                        int progress = 30;
+                        for (int i = 1; i <= jo2.length(); i++) {
 
-                        JSONObject tmpJo = jo2.getJSONObject("" + i);
+                            JSONObject tmpJo = jo2.getJSONObject("" + i);
 
-                        int sub_id = tmpJo.getInt("sub_id");
-                        String sub_full_name = tmpJo.getString("full_name");
-                        String sub_short_name = tmpJo.getString("short_name");
-                        int dow = tmpJo.getInt("dow");
-                        String teacher_name = tmpJo.getString("teacher");
+                            int sub_id = tmpJo.getInt("sub_id");
+                            String sub_full_name = tmpJo.getString("full_name");
+                            String sub_short_name = tmpJo.getString("short_name");
+                            int dow = tmpJo.getInt("dow");
+                            String teacher_name = tmpJo.getString("teacher");
 //                            String stringStart = extractTimefrom(tmpJo.getString("start_time"));
-                        int start_time = tmpJo.getInt("start_time");
+                            int start_time = tmpJo.getInt("start_time");
 //                            String stringEnd = extractTimefrom(tmpJo.getString("end_time"));
-                        int end_time = tmpJo.getInt("end_time");
+                            int end_time = tmpJo.getInt("end_time");
 //                            Log.d(TAG, "stringStart = " + stringStart + ", stringEnd = " + stringEnd);
 
 
-                        ContentValues cv = new ContentValues();
-                        cv.put(TTimetable.SUB_ID, sub_id);
-                        cv.put(TTimetable.SUB_full, sub_full_name);
-                        cv.put(TTimetable.SUB_short, sub_short_name);
-                        cv.put(TTimetable.DOW, dow);
-                        cv.put(TTimetable.TEACHER, teacher_name);
-                        cv.put(TTimetable.START_TIME, start_time);
-                        cv.put(TTimetable.END_TIME, end_time);
+                            ContentValues cv = new ContentValues();
+                            cv.put(TTimetable.SUB_ID, sub_id);
+                            cv.put(TTimetable.SUB_full, sub_full_name);
+                            cv.put(TTimetable.SUB_short, sub_short_name);
+                            cv.put(TTimetable.DOW, dow);
+                            cv.put(TTimetable.TEACHER, teacher_name);
+                            cv.put(TTimetable.START_TIME, start_time);
+                            cv.put(TTimetable.END_TIME, end_time);
 
-                        dbHelper.insert(TTimetable.NAME, cv);
-                        Log.d(TAG, i + ") Inserted value for day " + dow + " start: " + start_time + " end: " + end_time);
+                            dbHelper.insert(TTimetable.NAME, cv);
+                            Log.d(TAG, i + ") Inserted value for day " + dow + " start: " + start_time + " end: " + end_time);
 
-                        publishProgress(progress + (i * 2));
+                            publishProgress(progress + (i * 2));
 
+                        }
+
+                        dbHelper.close();
                     }
 
-                    dbHelper.close();
-
-//                    }
+                    // Get attendance details and write them in file in json format
+                    url = GET_MY_ATTENDANCE + "current_sem=" + MY_SEM + "&student_id=" + MY_ID;
+                    RemoteDatabaseConnecter rdc3 = new RemoteDatabaseConnecter("GET", url).connect(null);
+                    MyJson.saveData(AHome.this, rdc3.rawData, ATTENDANCE_FILE);
 
                     MY_ID = jo.getString("my_id");
                     MY_GCM_ID = jo.getString("my_gcm_id");

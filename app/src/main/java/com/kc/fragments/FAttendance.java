@@ -13,18 +13,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.kc.C;
 import com.kc.R;
 import com.kc.activities.AHome;
 import com.kc.other.Subject;
 import com.kc.utilites.MyJson;
-import com.kc.utilites.Network;
-import com.kc.utilites.RemoteDatabaseConnecter;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-
-import static com.kc.C.*;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,17 +61,10 @@ public class FAttendance extends Fragment {
 
             Subject[] subjects = new Subject[5];
 
-            String url;
-            url = GET_MY_ATTENDANCE + "current_sem=" + MY_SEM + "&student_id=" + MY_ID;
-            RemoteDatabaseConnecter rdc2;
+
             try {
 
-                if (Network.isConnectedToInternet(getActivity())) {
-                    rdc2 = new RemoteDatabaseConnecter("GET", url).connect(null);
-                    MyJson.saveData(getContext(), rdc2.rawData);
-                }
-
-                String json = MyJson.getData(getContext());
+                String json = MyJson.getData(getContext(), C.ATTENDANCE_FILE);
 
                 JSONObject jo2 = new JSONObject(json);
 
@@ -102,7 +90,7 @@ public class FAttendance extends Fragment {
 
                 Log.i("info", "Overall average: " + (Overall));
 
-            } catch (IOException | JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
             return subjects;
@@ -112,12 +100,12 @@ public class FAttendance extends Fragment {
         protected void onPostExecute(final Subject[] subjects) {
             for (int i = 0; i < subjects.length; i++) {
 
-                LinearLayout layout = (LinearLayout) view.findViewById(R.id.fattendance_layout);
+                LinearLayout layout = (LinearLayout) view.findViewById(R.id.fattendance_subjects);
                 layout.addView(inflateAttendanceCard(subjects[i]));
 
             }
 
-            LinearLayout layout = (LinearLayout) view.findViewById(R.id.fattendance_layout);
+            LinearLayout layout = (LinearLayout) view.findViewById(R.id.fattendance_overall);
             layout.addView(inflateOverallCell());
 
         }

@@ -6,6 +6,7 @@ public class C {
     more here: http://stackoverflow.com/questions/7959263/android-log-v-log-d-log-i-log-w-log-e-when-to-use-each-one/7959379#7959379 */
 
     public static final String FILE_NAME = "studentData";
+    public static final String ATTENDANCE_FILE = "attendance.json";
     public static final String GOOGLE_PROJECT_NO = "380016519033";
 
     public static final String root = "http://192.168.1.101:80/web/kc/";

@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     static final String NAME    = "local_db";
-    static final int    VERSION = 3;
+    static final int VERSION = 4;
     public SQLiteDatabase db;
     TTimetable   timetable;
     TNoticeboard noticeboard;
