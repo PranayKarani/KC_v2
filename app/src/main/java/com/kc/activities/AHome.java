@@ -5,9 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.NetworkInfo.State;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,10 +25,8 @@ import com.kc.R;
 import com.kc.database.DBHelper;
 import com.kc.database.DBHelper.dbType;
 import com.kc.database.TTimetable;
-import com.kc.fragments.FDetails;
-import com.kc.fragments.FHome;
-import com.kc.fragments.FNoticeboard;
-import com.kc.fragments.FTimeTable;
+import com.kc.fragments.*;
+import com.kc.utilites.Network;
 import com.kc.utilites.RemoteDatabaseConnecter;
 import com.kc.utilites.ShrPref;
 import org.json.JSONObject;
@@ -44,6 +39,7 @@ public class AHome extends MyActivity {
     public static final int F_NOTICEBOARD = 2;
     public static final int F_TIMETABLE = 3;
     public static final int F_DETAILS = 4;
+    public static final int F_ATTENDANCE = 5;
     public static int CURRENT_FRAGMENT = 0;
 
 
@@ -198,7 +194,7 @@ public class AHome extends MyActivity {
      */
     class InfoRefresher extends AsyncTask<Void, Integer, Void> {
 
-        boolean isConnected = false;
+        //        boolean isConnected = false;
         ProgressBar bar;
         Runnable r;
 
@@ -217,11 +213,8 @@ public class AHome extends MyActivity {
         public Void doInBackground(Void... params) {
 
             publishProgress(10);
-            ConnectivityManager conman = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo netInfo = conman.getActiveNetworkInfo();
-            isConnected = netInfo != null && netInfo.getState().equals(State.CONNECTED);
 
-            if (isConnected) {
+            if (Network.isConnectedToInternet(AHome.this)) {
                 String url = GET_STUDENT_INFO + "student_id=" + MY_ID;
 
                 try {
@@ -335,7 +328,7 @@ public class AHome extends MyActivity {
                     break;
                 case 1:
                     // Attendance
-                    f = new FNoticeboard();
+                    f = new FAttendance();
                     break;
                 case 2:
                     // time table

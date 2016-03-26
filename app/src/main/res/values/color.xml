@@ -8,4 +8,10 @@
     <color name="fav_notice">#c5f1ca</color>
     <color name="read_notice">#d5d5d5</color>
 
+    <color name="a_25">#dc8b8b</color>
+    <color name="a_25_50">#d9ae69</color>
+    <color name="a_50_75">#c1ce7a</color>
+    <color name="a_75_90">#90c47b</color>
+    <color name="a_90">#73dc73</color>
+
 </resources>

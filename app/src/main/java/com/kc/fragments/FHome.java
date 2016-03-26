@@ -122,7 +122,7 @@ public class FHome extends MyFragment {
                 int sub_color_id = (lecs[i].sub_id % 5) + 1;
                 int sub_color = getColor(sub_color_id);
                 Log.d("log", "sub_id " + sub_color_id);
-                lectureCardview.setCardBackgroundColor(getResources().getColor(sub_color));
+                lectureCardview.setCardBackgroundColor(getResources().getColor(sub_color));// TODO color based on attendance here
 
                 TextView n = (TextView) lectureCardview.findViewById(R.id.xScheduleData_sub_name);
                 n.setText(lecs[i].short_name);

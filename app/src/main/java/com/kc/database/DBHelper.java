@@ -46,6 +46,7 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL(noticeboard.createTable());
         }
 
+
     }
 
     @Override
