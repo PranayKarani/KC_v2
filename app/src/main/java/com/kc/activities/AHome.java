@@ -28,6 +28,7 @@ import com.kc.R;
 import com.kc.database.DBHelper;
 import com.kc.database.DBHelper.dbType;
 import com.kc.database.TTimetable;
+import com.kc.fragments.FDetails;
 import com.kc.fragments.FHome;
 import com.kc.fragments.FNoticeboard;
 import com.kc.fragments.FTimeTable;
@@ -42,6 +43,7 @@ public class AHome extends MyActivity {
     public static final int F_HOME = 1;
     public static final int F_NOTICEBOARD = 2;
     public static final int F_TIMETABLE = 3;
+    public static final int F_DETAILS = 4;
     public static int CURRENT_FRAGMENT = 0;
 
 
@@ -229,50 +231,50 @@ public class AHome extends MyActivity {
 
 //                    if (MY_SEM < jo.getInt("my_sem")) {
 
-                        MY_SEM = jo.getInt("my_sem");
+                    MY_SEM = jo.getInt("my_sem");
 
-                        // and delete previous one first
-                        DBHelper dbHelper = new DBHelper(AHome.this, dbType.WRITE);
-                        dbHelper.execSQL("DELETE FROM " + TTimetable.NAME);
+                    // and delete previous one first
+                    DBHelper dbHelper = new DBHelper(AHome.this, dbType.WRITE);
+                    dbHelper.execSQL("DELETE FROM " + TTimetable.NAME);
 
-                        // todo load new time table for new sem
-                        url = GET_TIMETABLE + "my_sem=" + MY_SEM;
-                        RemoteDatabaseConnecter rdc2 = new RemoteDatabaseConnecter("GET", url).connect(null);
-                        JSONObject jo2 = rdc2.getJSONObject();
-                        int progress = 30;
-                        for (int i = 1; i <= jo2.length(); i++) {
+                    // todo load new time table for new sem
+                    url = GET_TIMETABLE + "my_sem=" + MY_SEM;
+                    RemoteDatabaseConnecter rdc2 = new RemoteDatabaseConnecter("GET", url).connect(null);
+                    JSONObject jo2 = rdc2.getJSONObject();
+                    int progress = 30;
+                    for (int i = 1; i <= jo2.length(); i++) {
 
-                            JSONObject tmpJo = jo2.getJSONObject("" + i);
+                        JSONObject tmpJo = jo2.getJSONObject("" + i);
 
-                            int sub_id = tmpJo.getInt("sub_id");
-                            String sub_full_name = tmpJo.getString("full_name");
-                            String sub_short_name = tmpJo.getString("short_name");
-                            int dow = tmpJo.getInt("dow");
-                            String teacher_name = tmpJo.getString("teacher");
+                        int sub_id = tmpJo.getInt("sub_id");
+                        String sub_full_name = tmpJo.getString("full_name");
+                        String sub_short_name = tmpJo.getString("short_name");
+                        int dow = tmpJo.getInt("dow");
+                        String teacher_name = tmpJo.getString("teacher");
 //                            String stringStart = extractTimefrom(tmpJo.getString("start_time"));
-                            int start_time = tmpJo.getInt("start_time");
+                        int start_time = tmpJo.getInt("start_time");
 //                            String stringEnd = extractTimefrom(tmpJo.getString("end_time"));
-                            int end_time = tmpJo.getInt("end_time");
+                        int end_time = tmpJo.getInt("end_time");
 //                            Log.d(TAG, "stringStart = " + stringStart + ", stringEnd = " + stringEnd);
 
 
-                            ContentValues cv = new ContentValues();
-                            cv.put(TTimetable.SUB_ID, sub_id);
-                            cv.put(TTimetable.SUB_full, sub_full_name);
-                            cv.put(TTimetable.SUB_short, sub_short_name);
-                            cv.put(TTimetable.DOW, dow);
-                            cv.put(TTimetable.TEACHER, teacher_name);
-                            cv.put(TTimetable.START_TIME, start_time);
-                            cv.put(TTimetable.END_TIME, end_time);
+                        ContentValues cv = new ContentValues();
+                        cv.put(TTimetable.SUB_ID, sub_id);
+                        cv.put(TTimetable.SUB_full, sub_full_name);
+                        cv.put(TTimetable.SUB_short, sub_short_name);
+                        cv.put(TTimetable.DOW, dow);
+                        cv.put(TTimetable.TEACHER, teacher_name);
+                        cv.put(TTimetable.START_TIME, start_time);
+                        cv.put(TTimetable.END_TIME, end_time);
 
-                            dbHelper.insert(TTimetable.NAME, cv);
-                            Log.d(TAG, i + ") Inserted value for day " + dow + " start: " + start_time + " end: " + end_time);
+                        dbHelper.insert(TTimetable.NAME, cv);
+                        Log.d(TAG, i + ") Inserted value for day " + dow + " start: " + start_time + " end: " + end_time);
 
-                            publishProgress(progress + (i * 2));
+                        publishProgress(progress + (i * 2));
 
-                        }
+                    }
 
-                        dbHelper.close();
+                    dbHelper.close();
 
 //                    }
 
@@ -281,12 +283,14 @@ public class AHome extends MyActivity {
                     MY_SEM = jo.getInt("my_sem");
                     MY_ROLL = jo.getInt("my_roll");
                     MY_NAME = jo.getString("my_name");
+                    MY_EMAIL = jo.getString("my_email") == null ? "-" : jo.getString("my_email");
 
                     ShrPref.writeData(AHome.this, "my_student_id", MY_ID);
                     ShrPref.writeData(AHome.this, "my_gcm_id", MY_GCM_ID);
                     ShrPref.writeData(AHome.this, "my_sem", MY_SEM);
                     ShrPref.writeData(AHome.this, "my_roll", MY_ROLL);
                     ShrPref.writeData(AHome.this, "my_name", MY_NAME);
+                    ShrPref.writeData(AHome.this, "my_email", MY_EMAIL);
 
                     publishProgress(80);
 
@@ -339,6 +343,7 @@ public class AHome extends MyActivity {
                     break;
                 case 3:
                     // My Details
+                    f = new FDetails();
                     break;
                 case 4:
                     // staff contact

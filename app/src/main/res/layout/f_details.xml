@@ -1,0 +1,72 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context="com.kc.fragments.FDetails" android:orientation="vertical">
+
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scrollView">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Name"
+                    android:id="@+id/textView" android:textStyle="italic"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Bruce Wayne"
+                    android:id="@+id/fdetails_name" android:layout_marginBottom="15dp" android:textStyle="bold"
+                    android:layout_marginTop="-5dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Roll no"
+                    android:id="@+id/textView2" android:textStyle="italic"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="19"
+                    android:id="@+id/fdetails_rollno" android:layout_marginBottom="15dp" android:textStyle="bold"
+                    android:layout_marginTop="-5dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Student ID"
+                    android:id="@+id/textView3" android:textStyle="italic"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="100089"
+                    android:id="@+id/fdetails_id" android:layout_marginBottom="15dp" android:textStyle="bold"
+                    android:layout_marginTop="-5dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="Current Semester"
+                      android:id="@+id/textView4" android:textStyle="italic"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textAppearance="?android:attr/textAppearanceLarge" android:text="1"
+                      android:id="@+id/fdetails_sem" android:layout_marginBottom="15dp" android:textStyle="bold"
+                      android:layout_marginTop="-5dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="Email"
+                      android:id="@+id/textView5" android:textStyle="italic" android:layout_weight="1"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textAppearance="?android:attr/textAppearanceLarge"
+                      android:text="brucewayneawesome@wayne.com"
+                      android:id="@+id/fdetails_email"
+                      android:layout_marginBottom="15dp" android:layout_marginTop="-5dp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

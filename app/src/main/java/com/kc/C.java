@@ -13,6 +13,7 @@ public class C {
     public static final String STUDENT_VALIDTY  = root + "validity_check.php?";
     public static final String PASSWORD_CHECKER = root + "password_check.php?";
     public static final String UPDATE_GCM_ID    = root + "update_gcm_id.php";
+    public static final String UPDATE_EMAIL = root + "update_email.php";
     public static final String GET_STUDENT_INFO = root + "get_student_info.php?";
     public static final String GET_TIMETABLE    = root + "timetable/get_time_table.php?";
     public static final String GCM_ID_RECHECK   = root + "gcm_id_recheck.php?";
@@ -22,5 +23,6 @@ public class C {
     public static String MY_NAME;
     public static int    MY_SEM;
     public static int    MY_ROLL;
+    public static String MY_EMAIL;
 
 }

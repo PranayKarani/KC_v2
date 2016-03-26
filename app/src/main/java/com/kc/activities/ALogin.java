@@ -142,6 +142,7 @@ public class ALogin extends MyActivity {
         MY_SEM = sp.getInt("my_sem", -1);
         MY_ROLL = sp.getInt("my_roll", -1);
         MY_NAME = sp.getString("my_name", "notFound");
+        MY_EMAIL = sp.getString("my_email", "-");
         Log.i(TAG, "fileRead details:\n" +
                 "MY_ID = " + MY_ID + "\n" +
                 "MT_NAME = " + MY_NAME + "\n" +
