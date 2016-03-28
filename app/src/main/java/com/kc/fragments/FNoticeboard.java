@@ -25,7 +25,7 @@ public class FNoticeboard extends MyFragment {
     private Context stupidContext;
     
     public FNoticeboard() {
-        // Required empty public constructor
+        titleBar_text = "Noticeboard";
     }
     
     @Override
@@ -151,6 +151,7 @@ public class FNoticeboard extends MyFragment {
             final int ID = c.getInt(c.getColumnIndex(TNoticeboard.ID));
             final String header = c.getString(c.getColumnIndex(TNoticeboard.HEADER));
             final String body = c.getString(c.getColumnIndex(TNoticeboard.MESSAGE));
+            final String from = c.getString(c.getColumnIndex(TNoticeboard.SENDER));
             final int date = c.getInt(c.getColumnIndex(TNoticeboard.DATE));
             final int time = c.getInt(c.getColumnIndex(TNoticeboard.TIME));
 
@@ -174,7 +175,6 @@ public class FNoticeboard extends MyFragment {
                 @Override
                 public void onClick(View v) {
 
-                    // TODO activate this to read the unread notice
                     Intent i = new Intent(getActivity(), ANoticeViewer.class);
 
                     i.putExtra("ID", ID);
@@ -183,6 +183,7 @@ public class FNoticeboard extends MyFragment {
                     i.putExtra("fav", false);
                     i.putExtra("date", date);
                     i.putExtra("time", time);
+                    i.putExtra("from", time);
                     startActivity(i);
 
                 }
@@ -214,7 +215,6 @@ public class FNoticeboard extends MyFragment {
                 @Override
                 public void onClick(View v) {
 
-                    // TODO activate this to read the unread notice
                     Intent i = new Intent(getActivity(), ANoticeViewer.class);
 
                     i.putExtra("ID", ID);

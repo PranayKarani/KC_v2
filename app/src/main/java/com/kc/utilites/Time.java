@@ -1,5 +1,7 @@
 package com.kc.utilites; // 25 Mar, 12:40 AM
 
+import java.util.Calendar;
+
 public class Time {
 
     public int completeTime;
@@ -68,6 +70,11 @@ public class Time {
 
         }
         return t;
+    }
+
+    public static int weekdayToday() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     /**

@@ -15,7 +15,7 @@ import com.kc.database.TNoticeboard;
 public class ANoticeViewer extends AppCompatActivity {
 
     private int ID;
-    private String header, body;
+    private String header, body, from;
     private boolean fav;
     private int date, time;
 
@@ -32,7 +32,7 @@ public class ANoticeViewer extends AppCompatActivity {
         fav = getIntent().getBooleanExtra("fav", false);
         date = getIntent().getIntExtra("date", 1);
         time = getIntent().getIntExtra("time", 1);
-        // todo add "from" details also
+        from = getIntent().getStringExtra("from");
 
         dbh = new DBHelper(this, dbType.WRITE);
         ContentValues cv = new ContentValues();

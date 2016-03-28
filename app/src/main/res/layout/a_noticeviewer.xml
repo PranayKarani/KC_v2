@@ -30,18 +30,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Notice header text goes here"
-                    android:textSize="28dp"
+                    android:textSize="26dp"
                     android:textStyle="bold">
             </TextView>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="22 Jan. 1995, 7:30 am"
-                    android:id="@+id/date_time_text"
-                    android:textStyle="italic"
-                    android:layout_gravity="right"
-            />
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="- From Some Sender in Staff"
+                        android:id="@+id/from_text" android:layout_weight="1" android:textStyle="bold"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="22 Jan. 1995, 7:30 am"
+                        android:id="@+id/date_time_text"
+                        android:textStyle="italic"
+                        android:layout_gravity="right"
+                        android:textColor="#838383"/>
+            </LinearLayout>
             <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -55,6 +66,11 @@
                     android:text="This this is the body pf some horrible notice that student are recieving on their modile phones due to this awesome app"
                     android:textSize="18dp">
             </TextView>
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/abc_textfield_search_default_mtrl_alpha"
+                    android:layout_marginTop="8dp"/>
         </LinearLayout>
     </ScrollView>
 

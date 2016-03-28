@@ -74,17 +74,19 @@ public class ALogin extends MyActivity {
                         try {
 
                             // first check student's validity
-                            String validity_result = new RemoteDatabaseConnecter("GET", STUDENT_VALIDTY + "student_id=" + input_id)
+                            String result = new RemoteDatabaseConnecter("GET", STUDENT_VALIDTY + "student_id=" + input_id)
                                     .connect(null)
                                     .getRawData();
 
+                            String validity_result = String.valueOf(result.charAt(0));
+                            String student_email = result.substring(1, result.length());
                             Log.d(TAG, "validity result = " + validity_result);
 
                             switch (validity_result) {
                                 case "0":
                                     MY_ID = input_id;
                                     acceptPassword = true;
-                                    toastMessage = "Password sent to your email account.\nCheck your inbox.";
+                                    toastMessage = "Password sent to " + student_email + ".\nCheck your inbox.";
                                     break;
                                 case "1":
                                     toastMessage = "No such student found.\nTry again.";
@@ -92,8 +94,11 @@ public class ALogin extends MyActivity {
                                 case "2":
                                     toastMessage = "Account already active.\nContact staff for help.";
                                     break;
+                                case "3":
+                                    toastMessage = "Failed to send mail, Contact staff for your password";
+                                    break;
                                 default:
-                                    toastMessage = "Someting went wrong :(";
+                                    toastMessage = "Someting went wrong.\nRecheck your ID input or contact staff.   ";
                                     finish();
                                     break;
                             }

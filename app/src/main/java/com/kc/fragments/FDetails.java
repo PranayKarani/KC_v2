@@ -13,19 +13,16 @@ import com.kc.activities.AHome;
 
 public class FDetails extends MyFragment {
 
-    boolean getEmailInput = false;
-    private Context context;
-
     public FDetails() {
-        // Required empty public constructor
-        AHome.CURRENT_FRAGMENT = AHome.F_DETAILS;
+        titleBar_text = "Details";
+
     }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.context = context;
+        AHome.CURRENT_FRAGMENT = AHome.F_DETAILS;
 
     }
 

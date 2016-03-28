@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 public abstract class MyFragment extends Fragment {
 
     protected String CLASS = this.getClass().getSimpleName();
+    String titleBar_text;
     private   String TAG   = "Frag_Life";
 
     public MyFragment() {
@@ -22,6 +24,7 @@ public abstract class MyFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.v(TAG, CLASS + " attached to context " + context.toString());
+        ((AppCompatActivity) context).getSupportActionBar().setTitle(titleBar_text);
     }
 
     @Override

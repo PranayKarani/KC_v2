@@ -153,6 +153,7 @@ public class AHome extends MyActivity {
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             ft.commit();
             invalidateOptionsMenu();
+
         }
     }
 
@@ -328,7 +329,7 @@ public class AHome extends MyActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             FragmentManager fragMa = getSupportFragmentManager();
-            Fragment f = null;
+            Fragment f;
 
             switch (position) {
                 case 0:

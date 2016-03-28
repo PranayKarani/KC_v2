@@ -9,7 +9,7 @@ public class C {
     public static final String ATTENDANCE_FILE = "attendance.json";
     public static final String GOOGLE_PROJECT_NO = "380016519033";
 
-    public static final String root = "http://192.168.1.101:80/web/kc/";
+    public static final String root = "http://sitechnologies.in/pranay/";
 
     public static final String STUDENT_VALIDTY  = root + "validity_check.php?";
     public static final String PASSWORD_CHECKER = root + "password_check.php?";

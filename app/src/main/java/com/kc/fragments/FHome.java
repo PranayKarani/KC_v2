@@ -35,7 +35,7 @@ public class FHome extends MyFragment {
     int noof_notices;
 
     public FHome() {
-        super();
+        titleBar_text = "Home";
     }
 
     @Override

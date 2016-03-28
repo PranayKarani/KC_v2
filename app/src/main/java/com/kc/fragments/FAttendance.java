@@ -1,6 +1,7 @@
 package com.kc.fragments;
 
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,11 +25,18 @@ import org.json.JSONObject;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FAttendance extends Fragment {
+public class FAttendance extends MyFragment {
 
     public FAttendance() {
-        AHome.CURRENT_FRAGMENT = AHome.F_ATTENDANCE;
 
+        titleBar_text = "Attendance";
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        AHome.CURRENT_FRAGMENT = AHome.F_ATTENDANCE;
     }
 
     @Override

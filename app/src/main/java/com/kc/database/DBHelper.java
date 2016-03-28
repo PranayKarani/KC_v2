@@ -50,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public synchronized void close() {// todo learn about synchronized method
+    public synchronized void close() {
         super.close();
         db.close();
     }
