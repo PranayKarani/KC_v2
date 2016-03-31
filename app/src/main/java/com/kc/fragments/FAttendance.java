@@ -128,7 +128,11 @@ public class FAttendance extends MyFragment {
             TextView marksTV = (TextView) card.findViewById(R.id.sub_per);
             marksTV.setText(s.percentage + "%");
 
-            card.setCardBackgroundColor(getResources().getColor(getColor((int) s.percentage)));
+            if (s.held > 0) {
+                card.setCardBackgroundColor(getResources().getColor(getColor((int) s.percentage)));
+            } else {
+                card.setCardBackgroundColor(getResources().getColor(R.color.not_held));
+            }
 
             card.setOnClickListener(new View.OnClickListener() {
                 @Override

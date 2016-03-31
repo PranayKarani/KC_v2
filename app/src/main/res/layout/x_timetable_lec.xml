@@ -84,7 +84,7 @@
                           android:id="@+id/tt_teacher"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textAppearance="?android:attr/textAppearanceSmall"
                           android:textColor="#3d3d3d"/>
 
             </LinearLayout>

@@ -7,7 +7,7 @@ import android.net.NetworkInfo;
 
 public class Network {
 
-    public static boolean isConnectedToInternet(Activity activity) {
+    public boolean isConnectedToInternet(Activity activity) {
         ConnectivityManager conman = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = conman.getActiveNetworkInfo();
         boolean isConnected = netInfo != null && netInfo.getState().equals(NetworkInfo.State.CONNECTED);

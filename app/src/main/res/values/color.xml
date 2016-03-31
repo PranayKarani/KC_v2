@@ -13,5 +13,6 @@
     <color name="a_50_75">#c1ce7a</color>
     <color name="a_75_90">#90c47b</color>
     <color name="a_90">#73dc73</color>
+    <color name="not_held">#C1C1C1</color>
 
 </resources>

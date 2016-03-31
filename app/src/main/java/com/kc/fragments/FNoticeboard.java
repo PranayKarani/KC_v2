@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -152,8 +153,8 @@ public class FNoticeboard extends MyFragment {
             final String header = c.getString(c.getColumnIndex(TNoticeboard.HEADER));
             final String body = c.getString(c.getColumnIndex(TNoticeboard.MESSAGE));
             final String from = c.getString(c.getColumnIndex(TNoticeboard.SENDER));
-            final int date = c.getInt(c.getColumnIndex(TNoticeboard.DATE));
-            final int time = c.getInt(c.getColumnIndex(TNoticeboard.TIME));
+            final String date = c.getString(c.getColumnIndex(TNoticeboard.DATE));
+            final String time = c.getString(c.getColumnIndex(TNoticeboard.TIME));
 
 
             CardView cv = (CardView) FNoticeboard.this.getActivity().getLayoutInflater().inflate(R.layout.x_notice_unread, null);
@@ -183,7 +184,8 @@ public class FNoticeboard extends MyFragment {
                     i.putExtra("fav", false);
                     i.putExtra("date", date);
                     i.putExtra("time", time);
-                    i.putExtra("from", time);
+                    Log.i("DateTime", "from: " + from);
+                    i.putExtra("from", from);
                     startActivity(i);
 
                 }

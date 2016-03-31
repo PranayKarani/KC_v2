@@ -117,16 +117,16 @@ public class Time {
         if (m < 10) {
 
             // is hour > 12? yes, subtract 12 from it
-            if (h > 12) {
-                t = (h - 12) + ":0" + m + " pm";
+            if (h >= 12) {
+                t = (h == 12 ? 12 : (h - 12)) + ":0" + m + " pm";
             } else {
                 t = h + ":0" + m + " am";
             }
 
         } else {
 
-            if (h > 12) {
-                t = (h - 12) + ":" + m + " pm";
+            if (h >= 12) {
+                t = (h == 12 ? 12 : (h - 12)) + ":" + m + " pm";
             } else {
                 t = h + ":" + m + " am";
             }

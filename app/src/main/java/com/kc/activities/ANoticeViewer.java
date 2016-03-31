@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -15,9 +16,8 @@ import com.kc.database.TNoticeboard;
 public class ANoticeViewer extends AppCompatActivity {
 
     private int ID;
-    private String header, body, from;
+    private String header, body, from, date, time;
     private boolean fav;
-    private int date, time;
 
     private DBHelper dbh;
 
@@ -30,8 +30,8 @@ public class ANoticeViewer extends AppCompatActivity {
         header = getIntent().getStringExtra("header");
         body = getIntent().getStringExtra("body");
         fav = getIntent().getBooleanExtra("fav", false);
-        date = getIntent().getIntExtra("date", 1);
-        time = getIntent().getIntExtra("time", 1);
+        date = getIntent().getStringExtra("date");
+        time = getIntent().getStringExtra("time");
         from = getIntent().getStringExtra("from");
 
         dbh = new DBHelper(this, dbType.WRITE);
@@ -48,7 +48,10 @@ public class ANoticeViewer extends AppCompatActivity {
         b.setText(body);
 
         TextView dt = (TextView) findViewById(R.id.date_time_text);
-        dt.setText(getSyntaxedDateTime(date, time));
+        dt.setText(date);
+
+        TextView f = ((TextView) findViewById(R.id.from_text));
+        f.setText("From: " + from);
 
     }
 
@@ -95,49 +98,52 @@ public class ANoticeViewer extends AppCompatActivity {
         }
     }
 
-    String getSyntaxedDateTime(int date, int time) {
+    String getSyntaxedDateTime(String date, String time) {
 
         // decoding date
-        int y = (date / 10000);
-        date -= (y * 10000);
+//        int y = (date / 10000);
+//        date -= (y * 10000);
+//
+//        int m = date / 100;
+//        date -= (m * 100);
+//
+//        int d = date;
+//
+//        String da = d + " " + monthName(m) + " " + (y + 2000);
+//
+//        // decoding time
+//        boolean am = false;
+//        if (time < 1200) {
+//            am = true;
+//        }
+//
+//        int h = time / 100;
+//        time -= (h * 100);
+//        if (!am) {
+//            h -= 12;
+//        }
+//
+//        int min = time;
+//
+//        String tm = null;
+//        if (am) {
+//            if (min < 10) {
+//                tm = h + ":0" + min + " am";
+//            } else {
+//                tm = h + ":" + min + " am";
+//            }
+//        } else {
+//            if (min < 10) {
+//                tm = h + ":0" + min + " am";
+//            } else {
+//                tm = h + ":" + min + " pm";
+//            }
+//        }
 
-        int m = date / 100;
-        date -= (m * 100);
-
-        int d = date;
-
-        String da = d + " " + monthName(m) + " " + (y + 2000);
-
-        // decoding time
-        boolean am = false;
-        if (time < 1200) {
-            am = true;
-        }
-
-        int h = time / 100;
-        time -= (h * 100);
-        if (!am) {
-            h -= 12;
-        }
-
-        int min = time;
-
-        String tm = null;
-        if (am) {
-            if (min < 10) {
-                tm = h + ":0" + min + " am";
-            } else {
-                tm = h + ":" + min + " am";
-            }
-        } else {
-            if (min < 10) {
-                tm = h + ":0" + min + " am";
-            } else {
-                tm = h + ":" + min + " pm";
-            }
-        }
-
-        return da + ", " + tm;
+        Log.i("DateTime", "Before ->  Date: " + date + ", Time: " + time);
+//        Log.i("DateTime", "After -> Date: " + da + ", Time: " + tm);
+//        return da + ", " + tm;
+        return date + ", " + time;
 
     }
 

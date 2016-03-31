@@ -25,6 +25,7 @@ import com.kc.database.TNoticeboard;
 import com.kc.database.TTimetable;
 import com.kc.other.Lecture;
 import com.kc.utilites.ShrPref;
+import com.kc.utilites.Time;
 
 import java.util.Calendar;
 
@@ -81,6 +82,10 @@ public class FHome extends MyFragment {
             // load today's schedule
             int dayToday = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
 
+            if (Time.weekdayToday() == Calendar.SUNDAY) {
+                dayToday = 1;
+            }
+
             DBHelper dbh = new DBHelper(stupidContext, dbType.READ);
 
             Cursor c = dbh.rawQuery("SELECT * FROM " + TTimetable.NAME + " WHERE " + TTimetable.DOW + " = " + dayToday);
@@ -96,8 +101,8 @@ public class FHome extends MyFragment {
                 l.short_name = c.getString(c.getColumnIndex(TTimetable.SUB_short));
                 l.dow = c.getInt(c.getColumnIndex(TTimetable.DOW));
                 l.teacher = c.getString(c.getColumnIndex(TTimetable.TEACHER));
-                l.start_time = c.getInt(c.getColumnIndex(TTimetable.START_TIME));
-                l.end_time = c.getInt(c.getColumnIndex(TTimetable.END_TIME));
+                l.start_time = new Time(c.getInt(c.getColumnIndex(TTimetable.START_TIME)));
+                l.end_time = new Time(c.getInt(c.getColumnIndex(TTimetable.END_TIME)));
 
                 lecs[c.getPosition()] = l;
 
@@ -122,13 +127,14 @@ public class FHome extends MyFragment {
                 int sub_color_id = (lecs[i].sub_id % 5) + 1;
                 int sub_color = getColor(sub_color_id);
                 Log.d("log", "sub_id " + sub_color_id);
-                lectureCardview.setCardBackgroundColor(getResources().getColor(sub_color));// TODO color based on attendance here
+                lectureCardview.setCardBackgroundColor(getResources().getColor(sub_color));
 
                 TextView n = (TextView) lectureCardview.findViewById(R.id.xScheduleData_sub_name);
                 n.setText(lecs[i].short_name);
 
                 TextView t = (TextView) lectureCardview.findViewById(R.id.xScheduleData_sub_stime);
-                t.setText(lecs[i].getFormatedStartTime());
+                t.setText(lecs[i].start_time.timeIn24String());
+
 
                 final int finalI = i;
                 lectureCardview.setOnClickListener(new OnClickListener() {
@@ -139,8 +145,8 @@ public class FHome extends MyFragment {
                                 "Lecture name: " + lecs[finalI].full_name + "\n" +
                                         "Subject ID: " + lecs[finalI].sub_id + "\n" +
                                         "teacher: " + lecs[finalI].teacher + "\n" +
-                                        "Start time: " + lecs[finalI].getFormatedStartTime() + "\n" +
-                                        "End time: " + lecs[finalI].getFormatedEndTime(),
+                                        "Start time: " + lecs[finalI].start_time.timeIn12String() + "\n" +
+                                        "End time: " + lecs[finalI].end_time.timeIn12String(),
 
                                 Toast.LENGTH_LONG).show();
 

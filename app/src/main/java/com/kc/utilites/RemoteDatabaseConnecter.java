@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URL;
 
 public class RemoteDatabaseConnecter {
@@ -22,13 +23,24 @@ public class RemoteDatabaseConnecter {
         this.url = url;
     }
 
-    public RemoteDatabaseConnecter connect(String requestBody) throws IOException {
+    public RemoteDatabaseConnecter connect(String requestBody) {
 
         // todo check for internet connection
         // todo setup connection timeout
 
-        huc = (HttpURLConnection) new URL(url).openConnection();
-        huc.setRequestMethod(method);
+        try {
+            huc = (HttpURLConnection) new URL(url).openConnection();
+            huc.setReadTimeout(15000);
+            huc.setConnectTimeout(15000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            huc.setRequestMethod(method);
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        }
 
         huc.setDoInput(true);
         if (method.equals("POST")) {
@@ -39,28 +51,41 @@ public class RemoteDatabaseConnecter {
 
             huc.setFixedLengthStreamingMode(requestBody.getBytes().length);
 
-            OutputStream out = huc.getOutputStream();
-            out.write(requestBody.getBytes());
-            out.close();
+            OutputStream out = null;
+            try {
+                out = huc.getOutputStream();
+                out.write(requestBody.getBytes());
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         }
 
-        huc.connect();
+        try {
+            huc.connect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        if (huc.getResponseCode() == HttpURLConnection.HTTP_OK) {
+        try {
+            if (huc.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
-            StringBuilder sb = new StringBuilder();
-            InputStream is = huc.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            String data;
-            while ((data = br.readLine()) != null) {
-                sb.append(data);
+                StringBuilder sb = new StringBuilder();
+                InputStream is = huc.getInputStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String data;
+                while ((data = br.readLine()) != null) {
+                    sb.append(data);
+                }
+                is.close();
+                br.close();
+
+                rawData = sb.toString();
+
             }
-            is.close();
-            br.close();
-
-            rawData = sb.toString();
-
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 
@@ -77,8 +102,12 @@ public class RemoteDatabaseConnecter {
         return rawData;
     }
 
-    public String getServerResponse() throws IOException {
-        return "Response for " + url + "\ncode: " + huc.getResponseCode() + ", message: " + huc.getResponseMessage();
+    public String getServerResponse() {
+        try {
+            return "Response for " + url + "\ncode: " + huc.getResponseCode() + ", message: " + huc.getResponseMessage();
+        } catch (IOException e) {
+            return e.getLocalizedMessage();
+        }
     }
 
     public JSONObject getJSONObject(String dataSource, String dataName, int idx) throws JSONException {
@@ -94,17 +123,17 @@ public class RemoteDatabaseConnecter {
         return getJSONObject(rawData, dataName, idx);
     }
 
-    public JSONObject getJSONObject() throws JSONException {
-        return new JSONObject(rawData);
+    public JSONObject getJSONObject() {
+        try {
+            return new JSONObject(rawData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public String toString() {
-        try {
-            return getServerResponse() + "\nData from server:\n" + rawData;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return getServerResponse() + "\nData from server:\n" + rawData;
     }
 }
